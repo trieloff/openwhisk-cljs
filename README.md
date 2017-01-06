@@ -1,23 +1,32 @@
-# Building
+Running ClojureScript on OpenWhisk
+==================================
+
+Sample OpenWhisk action written in ClojureScript.
+
+## Installing
 
 First, compile ClojureScript
 
-````
-lein cljsbuild once server-prod
-````
+```bash
+> lein cljsbuild once server-prod
+```
 
-Then, inline the Javascript
 
-````
-cat target/js/openwhisk_cljs.core.js prod.js > src/js/openwhisk_cljs.core.js
-````
+ ```bash
+ > npm install
+ ```
 
-Test using
+This command installs the node modules and generates the source code for the action at `openwhisk-cljs-0.0.1.js`.
 
-````
-node src/js/openwhisk_cljs.core.js
-````
+## Testing it locally
 
-# Deploy
+```bash
+> node ./test/standalone.js 
 
-Just commit to GitHub, your Webhook takes care of the rest
+  Loading:./openwhisk-cljs-0.0.1.js
+  About to call ClojureScript. Wish me luck.
+  { payload: 'Hello from greet' }
+  About to call ClojureScript. Wish me luck.
+  RESULT:
+  { payload: 'Hello from greet' }
+```

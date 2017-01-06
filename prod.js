@@ -4,3 +4,5 @@ function main(params) {
 }
 
 console.log(main(null));
+
+module.exports.default = main;
