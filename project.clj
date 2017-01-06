@@ -9,7 +9,7 @@
     {:id "server-prod"
               :source-paths ["src/cljs"]
               :compiler {:main openwhisk-cljs.core
-                         :output-to "target/js/figwheel4node-server.core.js"
+                         :output-to "src/js/openwhisk_cljs.core.js"
                          :target :nodejs
                          :optimizations :simple ;; notice this!
                          }}

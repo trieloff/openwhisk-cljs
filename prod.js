@@ -1,4 +1,4 @@
-var cljs = require("./target/js/figwheel4node-server.core.js");
+var cljs = require("./src/js/openwhisk_cljs.core.js");
 //console.log("See ma, a JS object", cljs)
 
 function main(params) {
