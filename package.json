@@ -1,0 +1,56 @@
+{
+  "name": "openwhisk-cljs",
+  "version": "0.0.1",
+  "description": "Sample OpenWhisk Action with ClojureScript",
+  "main": "./prod.js",
+  "scripts": {
+    "start": "babel-watch ./test/server/index.js",
+    "test": "babel-node ./node_modules/.bin/isparta cover _mocha",
+    "test_no_cov": "mocha --compilers js:babel-register",
+    "prepublish": "browserify -r ${npm_package_main}:main-action --no-bundle-external > ${npm_package_name}-${npm_package_version}.js && npm run whisk_wrapper",
+    "whisk_wrapper": "echo \"var main = require('main-action').default;\" >> ${npm_package_name}-${npm_package_version}.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/trieloff/openwhisk-cljs.git"
+  },
+  "author": "Lars Trieloff <trieloff@adobe.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.16.0",
+    "babel-preset-babili": "0.0.9",
+    "babel-preset-latest": "^6.16.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.1",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "isparta": "^4.0.0",
+    "istanbul": "^0.3.17",
+    "mocha": "^2.5.3",
+    "supertest": "^1.1.0",
+    "supertest-as-promised": "^2.0.2"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify"
+      ]
+    ]
+  },
+  "babel": {
+    "presets": [
+      "latest", "babili"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/trieloff/openwhisk-cljs/issues"
+  },
+  "homepage": "https://github.com/trieloff/openwhisk-cljs",
+  "keywords": [
+    "serverless, openwhisk, clojurescript"
+  ]
+}
