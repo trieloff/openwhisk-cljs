@@ -5,7 +5,15 @@
             [lein-figwheel "0.3.9"]]
   :clean-targets ^{:protect false} ["target"]
   :cljsbuild {
-    :builds [{:id "server-dev"
+    :builds [
+    {:id "server-prod"
+              :source-paths ["src/cljs"]
+              :compiler {:main openwhisk-cljs.core
+                         :output-to "target/js/figwheel4node-server.core.js"
+                         :target :nodejs
+                         :optimizations :simple ;; notice this!
+                         }}
+    {:id "server-dev"
               :source-paths ["src/cljs"]
               :figwheel true
               :compiler {:main openwhisk-cljs.core
