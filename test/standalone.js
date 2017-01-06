@@ -27,15 +27,13 @@ script.runInContext(context);
 
 this.userScriptMain = sandbox.main;
 if (typeof this.userScriptMain === 'function') {
-    this.userScriptMain({})
-        .then( function (result) {
-            console.log("RESULT:");
-            console.log(result);
-        }).catch( function (error) {
-            console.error(error);
-        });
-
-
+    result = this.userScriptMain({});
+    if (result !== null && typeof(result) !== "undefined" ) {
+        console.log("RESULT:");
+        console.log(result);
+    } else {
+        console.error("Could not execute the main function");
+    }
 } else {
     console.log(typeof this.userScriptMain);
 }
