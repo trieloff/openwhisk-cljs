@@ -1,0 +1,9 @@
+package:
+  name: openwhisk-cljs
+  version: 1.0
+  license: Apache-2.0
+  actions:
+    hello:
+      version: 1.0
+      location: src/js/openwhisk_cljs.core.js
+      runtime: nodejs@6
