@@ -10,7 +10,7 @@ First, compile ClojureScript
 ```bash
 > lein cljsbuild once server-prod
 ```
-
+This should update the [src/js/openwhisk_cljs.core.js](src/js/openwhisk_cljs.core.js) file.
 
  ```bash
  > npm install
