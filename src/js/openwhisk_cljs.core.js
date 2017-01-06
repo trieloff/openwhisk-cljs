@@ -19657,4 +19657,9 @@ if (null != cljs.core._STAR_main_cli_fn_STAR_ && cljs.core.fn_QMARK_.call(null, 
 } else {
   throw Error("cljs.core/*main-cli-fn* not set");
 }
-;
+;function main(params) {
+  console.log("About to call ClojureScript. Wish me luck.");
+  return module.exports.greet(params);
+}
+
+console.log(main(null));

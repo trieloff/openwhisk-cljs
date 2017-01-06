@@ -5,6 +5,13 @@ Sample OpenWhisk action written in ClojureScript.
 
 ## Installing
 
+First, compile ClojureScript
+
+```bash
+> lein cljsbuild once server-prod
+```
+
+
  ```bash
  > npm install
  ```
@@ -23,4 +30,3 @@ This command installs the node modules and generates the source code for the act
   RESULT:
   { payload: 'Hello from greet' }
 ```
-
