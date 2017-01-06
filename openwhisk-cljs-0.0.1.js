@@ -8,7 +8,7 @@ return 0|i*s+((65535&o>>>16)*s+i*(65535&$>>>16)<<16>>>0)});var COMPILED=!0,goog=
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],"main-action":[function(require,module,exports){
 "use strict";var cljs=require("./src/js/openwhisk_cljs.core.js");//console.log("See ma, a JS object", cljs)
-function main(a){return console.log("About to call ClojureScript. Wish me luck."),cljs.greet(a)}console.log(main(null));
+function main(a){return console.log("About to call ClojureScript. Wish me luck."),cljs.greet(a)}console.log(main(null)),module.exports.default=main;
 
 },{"./src/js/openwhisk_cljs.core.js":1}]},{},[]);
 var main = require('main-action').default;
