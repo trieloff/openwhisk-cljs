@@ -7,7 +7,7 @@
     "start": "babel-watch ./test/server/index.js",
     "test": "babel-node ./node_modules/.bin/isparta cover _mocha",
     "test_no_cov": "mocha --compilers js:babel-register",
-    "prepublish": "browserify -r ${npm_package_main}:main-action --no-bundle-external > ${npm_package_name}-${npm_package_version}.js && npm run whisk_wrapper",
+    "prepublish": "lein cljsbuild once server-prod && browserify -r ${npm_package_main}:main-action --no-bundle-external > ${npm_package_name}-${npm_package_version}.js && npm run whisk_wrapper",
     "whisk_wrapper": "echo \"var main = require('main-action').default;\" >> ${npm_package_name}-${npm_package_version}.js"
   },
   "repository": {
