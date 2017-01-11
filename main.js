@@ -7,4 +7,4 @@ function main(params) {
   return cljs.greet(params);
 }
 
-console.log(main(null));
+//console.log(main(null));

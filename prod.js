@@ -6,6 +6,6 @@ function main(params) {
   return openwhisk_cljs.greet(params);
 }
 
-console.log(main(null));
+//console.log(main(null));
 
 module.exports.default = main;
