@@ -27,7 +27,7 @@ script.runInContext(context);
 
 this.userScriptMain = sandbox.main;
 if (typeof this.userScriptMain === 'function') {
-    result = this.userScriptMain({});
+    result = this.userScriptMain({"whorocks":"heavy"});
     if (result !== null && typeof(result) !== "undefined" ) {
         console.log("RESULT:");
         console.log(result);
