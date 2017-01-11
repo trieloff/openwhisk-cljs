@@ -7,7 +7,8 @@
 (def -main (fn [] (str "Clojure" "Script")))
 
 (defn greet [params]
-  {:payload (str "Hello from " "Clojure" "Script")})
+  {:payload (str "Hello from " "Clojure" "Script")
+   :echo params})
   
 (set! *main-cli-fn* -main)
 
