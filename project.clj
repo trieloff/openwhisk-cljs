@@ -1,7 +1,7 @@
 (defproject figwheel4node "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.107"]]
-  :plugins [[lein-cljsbuild "1.0.6"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/clojurescript "1.9.293"]]
+  :plugins [[lein-cljsbuild "1.1.5"]
             [lein-figwheel "0.3.9"]]
   :clean-targets ^{:protect false} ["target"]
   :cljsbuild {
