@@ -8,6 +8,7 @@
 
 (defn greet [params]
   {:payload (str "Hello from " "Clojure" "Script")
+   :message (str (:whorocks params) " rocks")
    :echo params})
   
 (set! *main-cli-fn* -main)
