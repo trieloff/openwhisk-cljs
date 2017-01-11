@@ -8,15 +8,16 @@
 (def -main (fn [] (str "Clojure" "Script")))
 
 (defn greet [params]
+  (println "Got these params")
   (println params)
-  (println (js-keys params))
-  (println (core/js->clj params))
-  ;;(println (keys (core/js->clj params)))
   {:payload (str "Hello from " "Clojure" "Script")
-   :message (str (get params "whorocks" "nobody") " rocks")
+   :message (if (= (:whorocks params) "you") "you. you rock!"
+    (str (get params :whorocks "nobody") " rocks"))
    :echo params})
   
 (set! *main-cli-fn* -main)
 
 (set! (.-exports js/module) #js {:hello -main
-                                 :greet (fn [params] (core/clj->js (greet params))) })
+                                 :greet (fn [params]
+                                   (def cparams (core/js->clj (.parse js/JSON (.stringify js/JSON params)) :keywordize-keys true))
+                                   (core/clj->js (greet cparams))) })
