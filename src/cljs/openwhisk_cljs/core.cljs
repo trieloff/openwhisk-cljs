@@ -13,4 +13,4 @@
 (set! *main-cli-fn* -main)
 
 (set! (.-exports js/module) #js {:hello -main
-                                 :greet (fn [params] (core/clj->js (greet (core/js->clj params))) ) })
+                                 :greet (fn [params] (core/clj->js (greet params)) ) })
