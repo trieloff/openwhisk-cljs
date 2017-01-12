@@ -21,5 +21,6 @@
                          :output-dir "target/js"
                          :target :nodejs
                          :optimizations :none
+                         :cache-analysis true
                          :source-map true }}]}
                          :figwheel {})

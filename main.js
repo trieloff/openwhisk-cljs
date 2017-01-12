@@ -1,10 +1,11 @@
-require("./target/js/figwheel4node_server_with_figwheel.js");
-var cljs = require("./target/js/openwhisk_cljs/core.js");
-//console.log("See ma, a JS object", cljs)
+require("./target/js/goog/bootstrap/nodejs.js")
+require("./target/js/figwheel4node_server_with_figwheel.js")
 
 function main(params) {
   console.log("About to call ClojureScript. Wish me luck.");
-  return cljs.greet(params);
+  return openwhisk_cljs.core.greetjs(params);
 }
 
-//console.log(main(null));
+
+
+console.log(main({"whorocks":"you"}));
