@@ -14,14 +14,14 @@
    :message (if (= (:whorocks params) "you") "you. you rock!"
     (str (:whorocks params) " rocks"))
    :echo params})
-   
-(defn greetjs [params]
-  (def cparams (core/js->clj (.parse js/JSON (.stringify js/JSON params)) :keywordize-keys true))
-                                   (def nparams (core/js->clj params :keywordize-keys true))
-                                   (println cparams)
-                                   (println nparams)
-                                   (core/clj->js (greet cparams))
-  )
+
+(defn jswrap [func]
+  (fn [p]
+    (def nparams (core/js->clj p :keywordize-keys true))
+    (core/clj->js (func nparams))))
+
+(def greetjs (jswrap greet))
+
 (set! *main-cli-fn* -main)
 
 (set! (.-exports js/module) #js {:hello -main
