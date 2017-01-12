@@ -18,7 +18,7 @@
 
 (defn greet [params]
   (->> (http/get client "http://www.example.com")
-       (p/map :headers))
+       (p/map #(hash-map :true true :headers (:headers %))))
   ;;(identity {:hans true})
   )
 
