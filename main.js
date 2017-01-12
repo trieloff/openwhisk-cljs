@@ -6,6 +6,13 @@ function main(params) {
   return openwhisk_cljs.core.greetjs(params);
 }
 
+var args = process.argv[2] ? JSON.parse(process.argv[2]) : null;
 
+Promise.resolve(main(args)).then(function(value) {
+  console.log("Resolving promise");
+  console.log(value);
+});
 
-console.log(main({"whorocks":"you"}));
+//console.log(process.argv[2]);
+
+//console.log();
