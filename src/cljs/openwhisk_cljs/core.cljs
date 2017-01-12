@@ -20,4 +20,5 @@
 (set! (.-exports js/module) #js {:hello -main
                                  :greet (fn [params]
                                    (def cparams (core/js->clj (.parse js/JSON (.stringify js/JSON params)) :keywordize-keys true))
-                                   (core/clj->js (greet cparams))) })
+                                   (def nparams (core/js->clj params :keywordize-keys true))
+                                   (core/clj->js (greet nparams))) })

@@ -34,18 +34,6 @@
     "supertest": "^1.1.0",
     "supertest-as-promised": "^2.0.2"
   },
-  "browserify": {
-    "transform": [
-      [
-        "babelify"
-      ]
-    ]
-  },
-  "babel": {
-    "presets": [
-      "latest", "babili"
-    ]
-  },
   "bugs": {
     "url": "https://github.com/trieloff/openwhisk-cljs/issues"
   },
