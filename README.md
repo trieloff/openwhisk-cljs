@@ -8,9 +8,9 @@ Sample OpenWhisk action written in ClojureScript.
 First, compile ClojureScript
 
 ```bash
-> lein cljsbuild once server-prod
+> lumo -c src/cljs build.cljs
 ```
-This should create/update the `src/js/openwhisk_cljs.core.js`.
+This should create/update the file `main.js`.
 
  ```bash
  > npm install
