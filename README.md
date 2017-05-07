@@ -8,25 +8,24 @@ Sample OpenWhisk action written in ClojureScript.
 First, compile ClojureScript
 
 ```bash
-> lumo -c src/cljs build.cljs
+$ lumo -c src/cljs build.cljs
 ```
-This should create/update the file `main.js`.
+This should create/update the file `main.js`. Alternatively, you can use leiningen.
 
- ```bash
- > npm install
- ```
+```bash
+$ lein cljsbuild once server-prod
+```
 
-This command installs the node modules and generates the source code for the action at `openwhisk-cljs-0.0.1.js`.
+This command installs the node modules and generates the source code for the action at `main.js`.
 
 ## Testing it locally
 
 ```bash
-> node ./test/standalone.js 
+$ node test.js ./main.js param1=value1
+```
 
-  Loading:./openwhisk-cljs-0.0.1.js
-  About to call ClojureScript. Wish me luck.
-  { payload: 'Hello from greet' }
-  About to call ClojureScript. Wish me luck.
-  RESULT:
-  { payload: 'Hello from greet' }
+Alternatively, you can also pass in parameters as a JSON object on stdin.
+
+```bash
+$ echo '{"foo":"bar"}' | node test.js ./main.js
 ```
