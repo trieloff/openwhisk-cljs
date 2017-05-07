@@ -5,5 +5,5 @@ package:
   actions:
     hello:
       version: 1.0
-      location: openwhisk-cljs-0.0.1.js
+      location: main.js
       runtime: nodejs@6
