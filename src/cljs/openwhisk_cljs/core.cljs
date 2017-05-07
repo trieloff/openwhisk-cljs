@@ -4,7 +4,23 @@
             
 (nodejs/enable-util-print!)
 
-(defn main [params]
-  {:args params})
+(defn question [id]
+  {:question id})
 
-(set! js/main (fn [args] (clj->js (main args))))
+(defn post [id]
+  {:post id})
+
+(defn error [url]
+  {:error (str url " " "is not a valid StackOverflow URL")})
+
+(defn main [params]
+  (println params)
+  (def id (re-find #"[\d]{4,}" (:url params)))
+  (def question? (not (nil? (re-find #"http://stackoverflow.com/questions/" (:url params)))))
+  (def post? (not (nil? (re-find #"http://stackoverflow.com/posts/" (:url params)))))
+  (cond
+    question? (question id)
+    post? (post id)
+    :else (error (:url params))))
+
+(set! js/main (fn [args] (clj->js (main (js->clj args :keywordize-keys true)))))
