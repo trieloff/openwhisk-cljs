@@ -4,9 +4,7 @@
             
 (nodejs/enable-util-print!)
 
-(def -main (fn [args] 
-  (println args)
-  (str "Clojure" "Script")))
+(defn main [params]
+  {:args params})
 
-(set! *main-cli-fn* -main)
-(set! js/main -main)
+(set! js/main (fn [args] (clj->js (main args))))
