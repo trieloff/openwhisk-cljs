@@ -12,5 +12,7 @@
 
 (set! *main-cli-fn* -main)
 
+(set! js/main -main)
+
 (set! (.-exports js/module) #js {:hello -main
                                  :greet greet })

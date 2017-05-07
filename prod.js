@@ -1,11 +1,5 @@
-var openwhisk_cljs = require("./target/js/openwhisk_cljs.core.js");
+require("./main.js");
 
-function main(params) {
-  console.log("About to call ClojureScript. Wish me luck.");
-  console.log(params);
-  return openwhisk_cljs.greet(params);
-}
+console.log("About to call ClojureScript. Wish me luck.");
 
-//console.log(main(null));
-
-module.exports.default = main;
+console.log(main({"hey":"ho"}));
