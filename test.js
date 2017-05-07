@@ -1,5 +1,7 @@
 process.stdin.setEncoding('utf8');
 
+const zlib = require('zlib');
+
 if (process.argv[2]=="--help"||process.argv[2]=="-h") {
   help();
 } else if (!process.stdin.isTTY) {
@@ -51,8 +53,9 @@ function run(params) {
   
   if (result.then) {
     Promise.resolve(result)
-      .then(result => console.log(result))
-      .catch(error => console.error(error));  
+//      .then(result => console.log(zlib.gunzipSync(result).toString("utf-8")))
+      .then(result => console.log(result.toString("utf-8")))
+      .catch(error => console.error(error));
   } else {
     console.log(result);
   }
