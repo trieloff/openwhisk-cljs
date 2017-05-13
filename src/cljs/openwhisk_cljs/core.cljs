@@ -13,8 +13,9 @@
 (defn gzjson [zipped]
   (js->clj (.parse js/JSON (gunzip zipped)) :keywordize-keys true))
 
-(defn question [id key]
+(defn question
   "Gets the question specified by `id` as a map."
+  [id key]
   (p/then (http/get client
                     (str "https://api.stackexchange.com/2.2/questions/" id "/")
                     {:query-params {:site "stackoverflow"
@@ -22,8 +23,9 @@
           (fn [response]
             (p/resolved (first (:items (gzjson (:body response))))))))
 
-(defn answers [id key]
+(defn answers
   "Gets the answers for the question specified by `id` as a list."
+  [id key]
   (p/then (http/get client
                     (str "https://api.stackexchange.com/2.2/questions/" id "/answers")
                     {:query-params {:site "stackoverflow"
@@ -31,26 +33,45 @@
           (fn [response]
             (p/resolved (:items (gzjson (:body response)))))))
 
-(defn full-question [id key]
-  "Gets question `id` including all answers"
-  (let [q (p/all [(question id key)
-                  (answers id key)])]
-    (p/then q (fn [[questn answrs]] {:question questn
-                                     :answers answrs}))))
+(defn full-question
+  "Gets question `id` including all answers. Optionally, filter answers with
+  function `pred`."
+  ([id key]
+    (full-question id key identity))
+  ([id key pred]
+   (let [q (p/all [(question id key)
+                   (answers id key)])]
+     (p/then q (fn [[questn answrs]] {:question questn
+                                      :answers  (filter pred answrs)})))))
 
-(defn post [id]
-  {:post id})
+(defn answer [id key]
+  (p/then (http/get client
+                    (str "https://api.stackexchange.com/2.2/answers/" id)
+                    {:query-params {:site "stackoverflow"
+                                    :key key}})
+          (fn [response]
+            (p/resolved (:items (gzjson (:body response)))))))
 
-(defn error [url]
-  {:error (str url " " "is not a valid StackOverflow URL")})
+(defn full-answer [aid qid key]
+  (let [q (p/all [(question qid key)
+                  (answer aid key)])]
+    (p/then q (fn [[questn answr]] {:question questn
+                                     :answers  answr}))))
+
+(defn error [url id]
+  {:error (str url " " "is not a valid StackOverflow URL")
+   :id id})
 
 (defn main [params]
-  (def id (re-find #"[\d]{4,}" (:url params)))
-  (def question? (not (nil? (re-find #"http://stackoverflow.com/questions/" (:url params)))))
-  (def post? (not (nil? (re-find #"http://stackoverflow.com/posts/" (:url params)))))
+  (def id (re-find #"http://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params)))
+  (def questionid (nth id 1))
+  (def answerid (nth id 2 false))
   (cond
-    question? (full-question id (:key params))
-    post? (post id)
-    :else (error (:url params))))
+    answerid (full-answer answerid questionid (:key params))
+    questionid (full-question questionid (:key params) #(:is_accepted %))
+    :else (error (:url params) id)))
 
-(set! js/main (fn [args] (clj->js (main (js->clj args :keywordize-keys true)))))
+(defn clj-promise->js [o]
+  (clj->js o))
+
+(set! js/main (fn [args] (clj-promise->js (main (js->clj args :keywordize-keys true)))))
