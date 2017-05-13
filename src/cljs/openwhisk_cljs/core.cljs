@@ -61,7 +61,25 @@
                                      :answers  answr}))))
 
 (defn html-question [{:keys [question answer] {:keys [title]} :question}]
-  (html [:span {:class "foo"} title]))
+  (html [:div {:class (str "stackoverflow-question" " " (if true "accepted" "open"))}
+         [:div {:class "meta"}
+          [:span {:class "votes"} "11 votes"]
+          [:span {:class (str "answers" " " (if true "accepted" "open"))} "5 answers"]
+          [:span {:class "views"} "311 views"]]
+         [:div {:class "title"}
+          [:a {:href "http://"} title]]
+         [:ul {:class "tags"}
+          [:li "python"]
+          [:li "pandas"]]
+         [:div {:class "author"}
+          [:a {:href "http://"} "asked yesterday"]
+          " by "
+          [:a {:href "http://"} "username"]]
+         [:div {:class "answer"}
+          [:a {:href "http://"} "accepted answer provided yesterday"]
+          " by "
+          [:a {:href "http://"} "username"]]
+         ]))
 
 (defn html-answer [{:keys [question answer] {:keys [title]} :question}]
   (str title))
