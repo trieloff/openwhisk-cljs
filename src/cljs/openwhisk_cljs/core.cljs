@@ -62,7 +62,7 @@
   (str title))
 
 (defn html-answer [{:keys [question answer] {:keys [title]} :question}]
-  (str title)
+  (str title))
 
 (defn oembed-question [question]
   {:version "1.0"
