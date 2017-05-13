@@ -16,11 +16,9 @@
 (defn question [id key]
   (p/then (http/get client
                     (str "https://api.stackexchange.com/2.2/questions/" id "/")
-                    {:headers {"Accept-Encoding" "identity"}
-                     :query-params {:site "stackoverflow"
+                    {:query-params {:site "stackoverflow"
                                     :key key}})
           (fn [response]
-            ;(println (js/require "zlib"))
             (p/resolved (first (:items (gzjson (:body response))))))))
 
 (defn post [id]
