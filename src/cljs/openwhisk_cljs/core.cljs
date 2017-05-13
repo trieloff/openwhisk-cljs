@@ -1,8 +1,10 @@
 (ns openwhisk-cljs.core
+  (:require-macros [hiccups.core :as hiccups :refer [html]])
   (:require [cljs.core :as core]
             [cljs.nodejs :as nodejs]
             [httpurr.client :as http]
             [promesa.core :as p]
+            [hiccups.runtime :as hiccupsrt]
             [httpurr.client.node :refer [client]]))
             
 (nodejs/enable-util-print!)
@@ -59,7 +61,7 @@
                                      :answers  answr}))))
 
 (defn html-question [{:keys [question answer] {:keys [title]} :question}]
-  (str title))
+  (html [:span {:class "foo"} title]))
 
 (defn html-answer [{:keys [question answer] {:keys [title]} :question}]
   (str title))
