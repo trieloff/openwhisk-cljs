@@ -68,6 +68,16 @@
    :provider_url "http://www.stackoverflow.com/"
    :html "none"})
 
+(defn oembed-answer [answer]
+  (println (-> answer :answers first :owner))
+  {:version "1.0"
+   :type "rich"
+   :author_name (-> answer :answers first :owner :display_name)
+   :author_url (str "http://stackoverflow.com/users/" (-> answer :answers first :owner :user_id))
+   :provider_name "StackOverflow"
+   :provider_url "http://www.stackoverflow.com/"
+   :html "none"})
+
 (defn error [url id]
   {:error (str url " " "is not a valid StackOverflow URL")
    :id id})
@@ -77,7 +87,7 @@
   (def questionid (nth id 1))
   (def answerid (nth id 2 false))
   (cond
-    answerid (full-answer answerid questionid (:key params))
+    answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
     questionid (p/then (full-question questionid (:key params) #(:is_accepted %)) oembed-question)
     :else (error (:url params) id)))
 
