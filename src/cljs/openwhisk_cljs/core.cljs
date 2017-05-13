@@ -14,12 +14,29 @@
   (js->clj (.parse js/JSON (gunzip zipped)) :keywordize-keys true))
 
 (defn question [id key]
+  "Gets the question specified by `id` as a map."
   (p/then (http/get client
                     (str "https://api.stackexchange.com/2.2/questions/" id "/")
                     {:query-params {:site "stackoverflow"
                                     :key key}})
           (fn [response]
             (p/resolved (first (:items (gzjson (:body response))))))))
+
+(defn answers [id key]
+  "Gets the answers for the question specified by `id` as a list."
+  (p/then (http/get client
+                    (str "https://api.stackexchange.com/2.2/questions/" id "/answers")
+                    {:query-params {:site "stackoverflow"
+                                    :key key}})
+          (fn [response]
+            (p/resolved (:items (gzjson (:body response)))))))
+
+(defn full-question [id key]
+  "Gets question `id` including all answers"
+  (let [q (p/all [(question id key)
+                  (answers id key)])]
+    (p/then q (fn [[questn answrs]] {:question questn
+                                     :answers answrs}))))
 
 (defn post [id]
   {:post id})
@@ -32,7 +49,7 @@
   (def question? (not (nil? (re-find #"http://stackoverflow.com/questions/" (:url params)))))
   (def post? (not (nil? (re-find #"http://stackoverflow.com/posts/" (:url params)))))
   (cond
-    question? (question id (:key params))
+    question? (full-question id (:key params))
     post? (post id)
     :else (error (:url params))))
 
