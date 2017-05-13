@@ -7,16 +7,21 @@
             
 (nodejs/enable-util-print!)
 
+(defn gunzip [in]
+  (.toString (.gunzipSync (js/require "zlib") in)))
+
+(defn gzjson [zipped]
+  (js->clj (.parse js/JSON (gunzip zipped)) :keywordize-keys true))
+
 (defn question [id key]
   (p/then (http/get client
                     (str "https://api.stackexchange.com/2.2/questions/" id "/")
-                    ;"http://www.example.com"
                     {:headers {"Accept-Encoding" "identity"}
                      :query-params {:site "stackoverflow"
                                     :key key}})
           (fn [response]
             ;(println (js/require "zlib"))
-            (p/resolved (.toString (.gunzipSync (js/require "zlib") (:body response)))))))
+            (p/resolved (first (:items (gzjson (:body response))))))))
 
 (defn post [id]
   {:post id})
