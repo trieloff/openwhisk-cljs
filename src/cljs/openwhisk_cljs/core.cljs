@@ -58,6 +58,16 @@
     (p/then q (fn [[questn answr]] {:question questn
                                      :answers  answr}))))
 
+(defn oembed-question [question]
+  (println (-> question :question :owner))
+  {:version "1.0"
+   :type "rich"
+   :author_name (-> question :question :owner :display_name)
+   :author_url (str "http://stackoverflow.com/users/" (-> question :question :owner :user_id))
+   :provider_name "StackOverflow"
+   :provider_url "http://www.stackoverflow.com/"
+   :html "none"})
+
 (defn error [url id]
   {:error (str url " " "is not a valid StackOverflow URL")
    :id id})
@@ -68,10 +78,12 @@
   (def answerid (nth id 2 false))
   (cond
     answerid (full-answer answerid questionid (:key params))
-    questionid (full-question questionid (:key params) #(:is_accepted %))
+    questionid (p/then (full-question questionid (:key params) #(:is_accepted %)) oembed-question)
     :else (error (:url params) id)))
 
 (defn clj-promise->js [o]
-  (clj->js o))
+  (if (p/promise? o)
+    (p/then o (fn [r] (p/resolved (clj->js r))))
+    (clj->js o)))
 
 (set! js/main (fn [args] (clj-promise->js (main (js->clj args :keywordize-keys true)))))
