@@ -58,25 +58,29 @@
     (p/then q (fn [[questn answr]] {:question questn
                                      :answers  answr}))))
 
+(defn html-question [{:keys [question answer] {:keys [title]} :question}]
+  (str title))
+
+(defn html-answer [{:keys [question answer] {:keys [title]} :question}]
+  (str title)
+
 (defn oembed-question [question]
-  (println (-> question :question :owner))
   {:version "1.0"
    :type "rich"
    :author_name (-> question :question :owner :display_name)
    :author_url (str "http://stackoverflow.com/users/" (-> question :question :owner :user_id))
    :provider_name "StackOverflow"
    :provider_url "http://www.stackoverflow.com/"
-   :html "none"})
+   :html (html-question question)})
 
 (defn oembed-answer [answer]
-  (println (-> answer :answers first :owner))
   {:version "1.0"
    :type "rich"
    :author_name (-> answer :answers first :owner :display_name)
    :author_url (str "http://stackoverflow.com/users/" (-> answer :answers first :owner :user_id))
    :provider_name "StackOverflow"
    :provider_url "http://www.stackoverflow.com/"
-   :html "none"})
+   :html (html-answer answer)})
 
 (defn error [url id]
   {:error (str url " " "is not a valid StackOverflow URL")
