@@ -84,7 +84,28 @@
          ]))
 
 (defn html-answer [{:keys [question answer] {:keys [title]} :question}]
-  (str title))
+  (println question)
+  (println answer)
+  (html [:div {:class (str "stackover-question" "selected")}
+         [:div {:class "meta"}
+          [:span {:class "votes"} "11 votes"]
+          [:span {:class (str "answers" " " (if true "accepted" "open"))} "5 answers"]
+          [:span {:class "views"} "311 views"]]
+         [:div {:class "title"}
+          [:a {:href "http://"} title]]
+         [:ul {:class "tags"}
+          [:li "python"]
+          [:li "pandas"]]
+         [:div {:class "body"} "question body here"]
+         [:div {:class "author"}
+          [:a {:href "http://"} "asked yesterday"]
+          " by "
+          [:a {:href "http://"} "username"]]
+         [:div {:class "answer"}
+          [:div {:class "body"} "answer body here"]
+          [:a {:href "http://"} "accepted answer provided yesterday"]
+          " by "
+          [:a {:href "http://"} "username"]]]))
 
 (defn oembed-question [question]
   {:version "1.0"
