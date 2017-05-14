@@ -7,13 +7,18 @@
             [hiccups.runtime :as hiccupsrt]
             [httpurr.client.node :refer [client]]))
 
+(def zlib (js/require "zlib"))
+(def defaultfilter "withbody")
+
 (nodejs/enable-util-print!)
 
-(defn gunzip [in]
-  (.toString (.gunzipSync (js/require "zlib") in)))
+(defn gunzip [in len]
+  ;(println (.-Z_FINISH (.-constants zlib)))
+  (println (.-length in) len)
+  (.toString (.gunzipSync zlib in (.-Z_FINISH (.-constants zlib)))))
 
-(defn gzjson [zipped]
-  (js->clj (.parse js/JSON (gunzip zipped)) :keywordize-keys true))
+(defn gzjson [zipped len]
+  (js->clj (.parse js/JSON (gunzip zipped len)) :keywordize-keys true))
 
 (defn question
   "Gets the question specified by `id` as a map."
@@ -22,9 +27,9 @@
                     (str "https://api.stackexchange.com/2.2/questions/" id "/")
                     {:query-params {:site "stackoverflow"
                                     :key key
-                                    :filter "withbody"}})
+                                    :filter defaultfilter}})
           (fn [response]
-            (p/resolved (first (:items (gzjson (:body response))))))))
+            (p/resolved (first (:items (gzjson (:body response) (get (-> response :headers) "Content-Length"))))))))
 
 (defn answers
   "Gets the answers for the question specified by `id` as a list."
@@ -34,7 +39,7 @@
                     {:query-params {:site "stackoverflow"
                                     :key key}})
           (fn [response]
-            (p/resolved (:items (gzjson (:body response)))))))
+            (p/resolved (:items (gzjson (:body response) (get (-> response :headers) "Content-Length")))))))
 
 (defn full-question
   "Gets question `id` including all answers. Optionally, filter answers with
@@ -52,9 +57,9 @@
                     (str "https://api.stackexchange.com/2.2/answers/" id)
                     {:query-params {:site "stackoverflow"
                                     :key key
-                                    :filter "withbody"}})
+                                    :filter defaultfilter}})
           (fn [response]
-            (p/resolved (:items (gzjson (:body response)))))))
+            (p/resolved (:items (gzjson (:body response) (get (-> response :headers) "Content-Length")))))))
 
 (defn full-answer [aid qid key]
   (let [q (p/all [(question qid key)
