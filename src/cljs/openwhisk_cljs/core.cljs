@@ -6,7 +6,7 @@
             [promesa.core :as p]
             [hiccups.runtime :as hiccupsrt]
             [httpurr.client.node :refer [client]]))
-            
+
 (nodejs/enable-util-print!)
 
 (defn gunzip [in]
@@ -21,7 +21,8 @@
   (p/then (http/get client
                     (str "https://api.stackexchange.com/2.2/questions/" id "/")
                     {:query-params {:site "stackoverflow"
-                                    :key key}})
+                                    :key key
+                                    :filter "withbody"}})
           (fn [response]
             (p/resolved (first (:items (gzjson (:body response))))))))
 
@@ -50,7 +51,8 @@
   (p/then (http/get client
                     (str "https://api.stackexchange.com/2.2/answers/" id)
                     {:query-params {:site "stackoverflow"
-                                    :key key}})
+                                    :key key
+                                    :filter "withbody"}})
           (fn [response]
             (p/resolved (:items (gzjson (:body response)))))))
 
