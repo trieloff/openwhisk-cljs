@@ -46,12 +46,12 @@
   "Gets question `id` including all answers. Optionally, filter answers with
   function `pred`."
   ([id key]
-    (full-question id key identity))
-  ([id key pred]
    (let [q (p/all [(question id key)
                    (answers id key)])]
      (p/then q (fn [[questn answrs]] {:question questn
-                                      :answers  (filter pred answrs)})))))
+                                      :accepted (first (filter #(:is_accepted %) answrs))
+                                      :top (last (sort-by :score answrs))
+                                      :first (first (sort-by :creation_date answrs))})))))
 
 (defn answer [id key]
   (p/then (http/get client
@@ -68,25 +68,39 @@
     (p/then q (fn [[questn answr]] {:question questn
                                      :answers  answr}))))
 
-(defn html-question [{:keys [question answer] {:keys [title]} :question}]
-  (html [:div {:class (str "stackoverflow-question" " " (if true "accepted" "open"))}
+(defn pretty-date [d]
+  (let [days (js/Math.round (/ (- d (/ (.getTime (js/Date.)) 1000)) (* -1 60 60 24)))]
+    (cond
+      (= 0 days) "today"
+      (= 1 days) "yesterday"
+      :else (str days " days ago"))))
+
+(defn html-question [{:keys [question accepted top first]
+                      {:keys [title link score view_count answer_count tags owner creation_date]} :question}]
+  (html [:div {:class (str "stackoverflow-question" " " (if accepted "accepted" "open"))}
          [:div {:class "meta"}
-          [:span {:class "votes"} "11 votes"]
-          [:span {:class (str "answers" " " (if true "accepted" "open"))} "5 answers"]
-          [:span {:class "views"} "311 views"]]
+          [:span {:class "votes"} (str score " votes")]
+          [:span {:class (str "answers" " " (if accepted "accepted" "open"))} (str answer_count " answers")]
+          [:span {:class "views"} (str view_count " views")]]
          [:div {:class "title"}
-          [:a {:href "http://"} title]]
+          [:a {:href link} title]]
          [:ul {:class "tags"}
-          [:li "python"]
-          [:li "pandas"]]
+          (map #(vector :li %) tags)]
          [:div {:class "author"}
-          [:a {:href "http://"} "asked yesterday"]
-          " by "
+          [:a {:href (:link owner)} (:display_name owner)]
+          " "
+          [:a {:href link} "asked " (pretty-date creation_date)]
           [:a {:href "http://"} "username"]]
-         [:div {:class "answer"}
-          [:a {:href "http://"} "accepted answer provided yesterday"]
-          " by "
-          [:a {:href "http://"} "username"]]
+         [:div body (:body question)]
+         (if accepted
+           [:div {:class "answer"}
+            [:a {:href (str link "/" (:answer_id accepted))} "accepted answer provided " (pretty-date (:creation_date accepted))]
+            " by "
+            [:a {:href (:link (:owner accepted))} (:display_name (:owner accepted))]]
+           [:div {:class "answer"}
+            [:a {:href (str link "/" (:answer_id top))} "top answer provided " (pretty-date (:creation_date top))]
+            " by "
+            [:a {:href (:link (:owner top))} (:display_name (:owner top))]])
          ]))
 
 (defn html-answer [{:keys [question answer] {:keys [title]} :question}]
@@ -141,7 +155,7 @@
   (def answerid (nth id 2 false))
   (cond
     answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
-    questionid (p/then (full-question questionid (:key params) #(:is_accepted %)) oembed-question)
+    questionid (p/then (full-question questionid (:key params)) oembed-question)
     :else (error (:url params) id)))
 
 (defn clj-promise->js [o]
