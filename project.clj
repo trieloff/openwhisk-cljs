@@ -1,6 +1,6 @@
 (defproject openwhisk-cljs "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojurescript "1.9.521" :exclusions [org.apache.ant/ant]]
-                 [funcool/httpurr "0.6.2"]
+                 [funcool/httpurr "0.6.3"]
                  [hiccups "0.3.0"]
                  [org.clojure/clojure "1.8.0"]]
   :plugins [[lein-cljsbuild "1.1.6"]]
