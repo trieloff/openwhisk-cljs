@@ -14,12 +14,11 @@
 
 (defn gunzip [in len]
   ;(println (.-Z_FINISH (.-constants zlib)))
-  (println (.-length in) len)
   (def unzipped (.toString (.gunzipSync zlib in #js {:finishFlush  (.-Z_SYNC_FLUSH (.-constants zlib))})))
-  (println unzipped)
   (identity unzipped))
 
 (defn gzjson [zipped len]
+  "Turn a GZipped string into JSON"
   (js->clj (.parse js/JSON (gunzip zipped len)) :keywordize-keys true))
 
 (defn question
