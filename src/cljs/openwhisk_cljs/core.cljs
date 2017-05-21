@@ -38,6 +38,7 @@
   (p/then (http/get client
                     (str "https://api.stackexchange.com/2.2/questions/" id "/answers")
                     {:query-params {:site "stackoverflow"
+                                    :filter defaultfilter
                                     :key key}})
           (fn [response]
             (p/resolved (:items (gzjson (:body response) (get (-> response :headers) "Content-Length")))))))
@@ -78,26 +79,27 @@
 (defn html-question [{:keys [question accepted top first]
                       {:keys [title link score view_count answer_count tags owner creation_date]} :question}]
   (html [:div {:class (str "stackoverflow-question" " " (if accepted "accepted" "open"))}
-         [:div {:class "meta"}
-          [:span {:class "votes"} (str score " votes")]
+         [:div.meta
+          [:span.votes (str score " votes")]
           [:span {:class (str "answers" " " (if accepted "accepted" "open"))} (str answer_count " answers")]
-          [:span {:class "views"} (str view_count " views")]]
-         [:div {:class "title"}
+          [:span.views (str view_count " views")]]
+         [:div.title
           [:a {:href link} title]]
-         [:ul {:class "tags"}
+         [:ul.tags
           (map #(vector :li %) tags)]
-         [:div {:class "author"}
+         [:div.author
           [:a {:href (:link owner)} (:display_name owner)]
           " "
           [:a {:href link} "asked " (pretty-date creation_date)]
           [:a {:href "http://"} "username"]]
-         [:div body (:body question)]
+         [:div.body (:body question)]
          (if accepted
-           [:div {:class "answer"}
+           [:div.answer
             [:a {:href (str link "/" (:answer_id accepted))} "accepted answer provided " (pretty-date (:creation_date accepted))]
             " by "
-            [:a {:href (:link (:owner accepted))} (:display_name (:owner accepted))]]
-           [:div {:class "answer"}
+            [:a {:href (:link (:owner accepted))} (:display_name (:owner accepted))]
+            [:div.body (:body accepted)]]
+           [:div.answer
             [:a {:href (str link "/" (:answer_id top))} "top answer provided " (pretty-date (:creation_date top))]
             " by "
             [:a {:href (:link (:owner top))} (:display_name (:owner top))]])
