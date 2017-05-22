@@ -7,3 +7,7 @@ package:
       version: 1.0
       location: main.js
       runtime: nodejs@6
+      inputs:
+        key:
+          type: String
+          description: StackExchange API Key
