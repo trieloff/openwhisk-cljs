@@ -107,8 +107,6 @@
 
 (defn html-answer [{:keys [question answer]
                     {:keys [title link score view_count answer_count tags owner creation_date]} :question}]
-  (println question)
-  (println answer)
   (html [:div {:class (str "stackoverflow-question" " " "selected")}
          [:div.meta
           [:span.votes (str score " votes")]
@@ -127,8 +125,8 @@
          [:div.answer
           [:a {:href (str link "/" (:answer_id question))} "featured answer provided " (pretty-date (:creation_date question))]
           " by "
-          [:a {:href (:link (:owner question))} (:display_name (:owner accquestionepted))]
-          [:div.body (:body question)]]
+          [:a {:href (:link (:owner answer))} (:display_name (:owner answer))]
+          [:div.body (:body answer)]]
          ]))
 
 (defn oembed-question [question]
