@@ -1,6 +1,8 @@
 compile:
   override:
+  - rm main.js
   - lein cljsbuild once server-prod
+  - lein install
 test:
   override:
   - node main.js
