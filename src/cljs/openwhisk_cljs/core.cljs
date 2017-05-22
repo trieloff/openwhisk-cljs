@@ -67,7 +67,7 @@
   (let [q (p/all [(question qid key)
                   (answer aid key)])]
     (p/then q (fn [[questn answr]] {:question questn
-                                     :answer  answr}))))
+                                    :answer   (first answr)}))))
 
 (defn pretty-date [d]
   (let [days (js/Math.round (/ (- d (/ (.getTime (js/Date.)) 1000)) (* -1 60 60 24)))]
