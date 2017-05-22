@@ -1,6 +1,9 @@
 compile:
   override:
   - lein cljsbuild once server-prod
+test:
+  override:
+  - node main.js
 deployment:
   production:
     branch: dev
