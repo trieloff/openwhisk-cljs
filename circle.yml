@@ -12,5 +12,8 @@ deployment:
     commands:
     - git config --global user.email deploy@circleci.com
     - git config --global user.name 'CircleCI'
+    - git stash save main.js
+    - git checkout master
+    - git stash pop
     - git commit main.js -m "Deploy with CircleCI"
     - git push origin HEAD:master
