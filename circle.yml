@@ -1,7 +1,11 @@
+compile:
+  override:
+  - lein cljsbuild once server-prod
 deployment:
   production:
     branch: dev
     commands:
     - git config --global user.email deploy@circleci.com
     - git config --global user.name 'CircleCI'
-    - git commit main.js -m "Deploy with CircleCI" && git push origin HEAD:master
+    - git commit main.js -m "Deploy with CircleCI"
+    - git push origin HEAD:master
