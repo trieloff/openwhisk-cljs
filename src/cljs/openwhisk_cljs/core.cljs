@@ -107,7 +107,7 @@
 
 (defn html-answer [{:keys [question answer]
                     {:keys [title link score view_count answer_count tags owner creation_date]} :question}]
-  (html [:div {:class (str "stackoverflow-question" " " "selected")}
+  (html [:div {:class (str "stackoverflow-question" " " "featured")}
          [:div.meta
           [:span.votes (str score " votes")]
           [:span {:class (str "answers" " " "selected")} (str answer_count " answers")]
