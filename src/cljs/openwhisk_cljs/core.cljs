@@ -67,7 +67,7 @@
   (let [q (p/all [(question qid key)
                   (answer aid key)])]
     (p/then q (fn [[questn answr]] {:question questn
-                                     :answers  answr}))))
+                                     :answer  answr}))))
 
 (defn pretty-date [d]
   (let [days (js/Math.round (/ (- d (/ (.getTime (js/Date.)) 1000)) (* -1 60 60 24)))]
@@ -105,29 +105,31 @@
             [:a {:href (:link (:owner top))} (:display_name (:owner top))]])
          ]))
 
-(defn html-answer [{:keys [question answer] {:keys [title]} :question}]
+(defn html-answer [{:keys [question answer]
+                    {:keys [title link score view_count answer_count tags owner creation_date]} :question}]
   (println question)
   (println answer)
-  (html [:div {:class (str "stackover-question" "selected")}
-         [:div {:class "meta"}
-          [:span {:class "votes"} "11 votes"]
-          [:span {:class (str "answers" " " (if true "accepted" "open"))} "5 answers"]
-          [:span {:class "views"} "311 views"]]
-         [:div {:class "title"}
-          [:a {:href "http://"} title]]
-         [:ul {:class "tags"}
-          [:li "python"]
-          [:li "pandas"]]
-         [:div {:class "body"} "question body here"]
-         [:div {:class "author"}
-          [:a {:href "http://"} "asked yesterday"]
-          " by "
+  (html [:div {:class (str "stackoverflow-question" " " "selected")}
+         [:div.meta
+          [:span.votes (str score " votes")]
+          [:span {:class (str "answers" " " "selected")} (str answer_count " answers")]
+          [:span.views (str view_count " views")]]
+         [:div.title
+          [:a {:href link} title]]
+         [:ul.tags
+          (map #(vector :li %) tags)]
+         [:div.author
+          [:a {:href (:link owner)} (:display_name owner)]
+          " "
+          [:a {:href link} "asked " (pretty-date creation_date)]
           [:a {:href "http://"} "username"]]
-         [:div {:class "answer"}
-          [:div {:class "body"} "answer body here"]
-          [:a {:href "http://"} "accepted answer provided yesterday"]
+         [:div.body (:body question)]
+         [:div.answer
+          [:a {:href (str link "/" (:answer_id question))} "featured answer provided " (pretty-date (:creation_date question))]
           " by "
-          [:a {:href "http://"} "username"]]]))
+          [:a {:href (:link (:owner question))} (:display_name (:owner accquestionepted))]
+          [:div.body (:body question)]]
+         ]))
 
 (defn oembed-question [question]
   {:version "1.0"
