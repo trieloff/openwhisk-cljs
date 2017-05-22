@@ -1,0 +1,5 @@
+deployment:
+  production:
+    branch: dev
+    commands:
+    - git commit main.js -m "Deploy with CircleCI" && git push origin HEAD:master
