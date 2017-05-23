@@ -6,11 +6,3 @@ compile:
 test:
   override:
   - node main.js
-deployment:
-  production:
-    branch: master
-    commands:
-    - git config --global user.email deploy@circleci.com
-    - git config --global user.name 'CircleCI'
-    - git commit main.js -m "Deploy with CircleCI"
-    - git push origin master
