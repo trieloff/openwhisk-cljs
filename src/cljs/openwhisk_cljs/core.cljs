@@ -74,7 +74,7 @@
     (cond
       (= 0 days) "today"
       (= 1 days) "yesterday"
-      :else (str days " days ago"))))
+      :else (str days "  days ago"))))
 
 (defn html-question [{:keys [question accepted top first]
                       {:keys [title link score view_count answer_count tags owner creation_date]} :question}]
