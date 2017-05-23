@@ -15,6 +15,5 @@ deployment:
     - git stash save main.js
     - git checkout master
     - git pull
-    - git stash pop
-    - git commit main.js -m "Deploy with CircleCI"
+    - git stash pop && git commit main.js -m "Deploy with CircleCI" || echo "nothing to do"
     - git push origin HEAD:master
