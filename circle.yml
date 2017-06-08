@@ -1,5 +1,6 @@
 compile:
   override:
+  - lein --version
   - lein cljsbuild once server-prod
   - lein install
 test:
