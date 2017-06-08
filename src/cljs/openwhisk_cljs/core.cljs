@@ -155,7 +155,7 @@
   (if (nil? (:url params))
     {:version "1.0"
      :test "hey"
-     :error "You need to specify a URL to embed. Use the ?url parameter."}
+     :error "You need to specify a URL to embed. Use the `url` parameter."}
     (let [id (re-find #"http://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
           questionid (nth id 1)
           answerid (nth id 2 false)]
