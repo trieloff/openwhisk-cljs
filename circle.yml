@@ -6,7 +6,7 @@ compile:
 test:
   override:
   - node main.js
-  - head -n 1 main.js | grep node
+  - head -n 1 main.js | grep node || tail -n +1 main.js > main.js
 deployment:
   production:
     branch: dev
