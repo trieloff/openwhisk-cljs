@@ -1,6 +1,5 @@
 compile:
   override:
-  - rm main.js
   - lein cljsbuild once server-prod
   - lein install
 test:
@@ -13,7 +12,9 @@ deployment:
       - git config --global user.email deploy@circleci.com
       - git config --global user.name 'CircleCI'
       - git checkout master
+      - git stash
       - git pull -s recursive -X ours
+      - git stash pop
       - git commit main.js -m "Deploy with CircleCI" || echo "nothing to do"
       - git push origin HEAD:master
 
