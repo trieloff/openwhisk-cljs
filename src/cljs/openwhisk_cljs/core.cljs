@@ -10,9 +10,6 @@
 (def zlib (js/require "zlib"))
 (def defaultfilter "withbody")
 
-(println "Hello World")
-
-
 (nodejs/enable-util-print!)
 
 (defn gunzip [in len]
