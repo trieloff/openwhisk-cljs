@@ -15,6 +15,7 @@ deployment:
     - git stash save main.js
     - git checkout master
     - git pull -s recursive -X ours
-    - git stash pop && git commit main.js -m "Deploy with CircleCI" || echo "nothing to do"
+    - git stash show -p | git apply -3 && git stash drop
+    - git commit main.js -m "Deploy with CircleCI" || echo "nothing to do"
     - git push origin HEAD:master
 
