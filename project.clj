@@ -13,5 +13,6 @@
               :compiler {:main openwhisk-cljs.core
                          :output-to "main.js"
                          :target :nodejs
+                         :hashbang false
                          :optimizations :simple ;; notice this!
                          }}]})
