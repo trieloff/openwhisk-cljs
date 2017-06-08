@@ -1,47 +1,168 @@
-(ns ^:figwheel-always openwhisk-cljs.core
-  (:require [cljs.nodejs :as nodejs]
-      [cljs.pprint :as pprint]
-      [httpurr.client :as http]
-      [httpurr.client.node :refer [client]]
-      [promesa.core :as p]
-      [cljs.core :as core]))
+(ns openwhisk-cljs.core
+  (:require-macros [hiccups.core :as hiccups :refer [html]])
+  (:require [cljs.core :as core]
+            [cljs.nodejs :as nodejs]
+            [httpurr.client :as http]
+            [promesa.core :as p]
+            [hiccups.runtime :as hiccupsrt]
+            [httpurr.client.node :refer [client]]))
+
+(def zlib (js/require "zlib"))
+(def defaultfilter "withbody")
+
 (nodejs/enable-util-print!)
 
-;;(println "Hello from the Node!")
-(def -main (fn [] (str "Clojure" "Script")))
+(defn gunzip [in len]
+  ;(println (.-Z_FINISH (.-constants zlib)))
+  (def unzipped (.toString (.gunzipSync zlib in #js {:finishFlush  (.-Z_SYNC_FLUSH (.-constants zlib))})))
+  (identity unzipped))
 
-;; {:payload (str "Hello from " "Clojure" "Script")
-;;                                                                      :http %
-;;                                                                      :message (if (= (:whorocks params) "you") "you. you rock!"
-;;                                                                                 (str (:whorocks params) " rocks"))
-;;                                                                      :echo params}
+(defn gzjson [zipped len]
+  "Turn a GZipped string into JSON"
+  (js->clj (.parse js/JSON (gunzip zipped len)) :keywordize-keys true))
 
-(defn greet [params]
-  (->> (http/get client "http://www.example.com")
-       (p/map #(hash-map :true true :headers (:headers %))))
-  ;;(identity {:hans true})
-  )
+(defn question
+  "Gets the question specified by `id` as a map."
+  [id key]
+  (p/then (http/get client
+                    (str "https://api.stackexchange.com/2.2/questions/" id "/")
+                    {:query-params {:site "stackoverflow"
+                                    :key key
+                                    :filter defaultfilter}})
+          (fn [response]
+            (p/resolved (first (:items (gzjson (:body response) (get (-> response :headers) "Content-Length"))))))))
 
-;;(p/promise (fn [resolve reject] (resolve (core/clj->js params))))
+(defn answers
+  "Gets the answers for the question specified by `id` as a list."
+  [id key]
+  (p/then (http/get client
+                    (str "https://api.stackexchange.com/2.2/questions/" id "/answers")
+                    {:query-params {:site "stackoverflow"
+                                    :filter defaultfilter
+                                    :key key}})
+          (fn [response]
+            (p/resolved (:items (gzjson (:body response) (get (-> response :headers) "Content-Length")))))))
 
-(defn jswrap [func]
-  (fn [p]
-    (def nparams (core/js->clj p :keywordize-keys true))
-    (core/clj->js (func nparams))))
+(defn full-question
+  "Gets question `id` including all answers. Optionally, filter answers with
+  function `pred`."
+  ([id key]
+   (let [q (p/all [(question id key)
+                   (answers id key)])]
+     (p/then q (fn [[questn answrs]] {:question questn
+                                      :accepted (first (filter #(:is_accepted %) answrs))
+                                      :top (last (sort-by :score answrs))
+                                      :first (first (sort-by :creation_date answrs))})))))
 
-(defn jswrapp [func]
-  (fn [p]
-    (def nparams (core/js->clj p :keywordize-keys true))
-    (def result (func nparams))
-    ;;there is probably a better way to determine if we are getting a promise as result.
-    (if (= "[object Promise]" (type->str result))
-      (p/map core/clj->js result)
-      (core/clj->js result))))
+(defn answer [id key]
+  (p/then (http/get client
+                    (str "https://api.stackexchange.com/2.2/answers/" id)
+                    {:query-params {:site "stackoverflow"
+                                    :key key
+                                    :filter defaultfilter}})
+          (fn [response]
+            (p/resolved (:items (gzjson (:body response) (get (-> response :headers) "Content-Length")))))))
 
-(def greetjs (jswrapp greet))
+(defn full-answer [aid qid key]
+  (let [q (p/all [(question qid key)
+                  (answer aid key)])]
+    (p/then q (fn [[questn answr]] {:question questn
+                                    :answer   (first answr)}))))
 
-(set! *main-cli-fn* -main)
+(defn pretty-date [d]
+  (let [days (js/Math.round (/ (- d (/ (.getTime (js/Date.)) 1000)) (* -1 60 60 24)))]
+    (cond
+      (= 0 days) "today"
+      (= 1 days) "yesterday"
+      :else (str days " days ago"))))
 
-(set! (.-exports js/module) #js {:hello -main
-                                 :greet (fn [params]
-                                   (greetjs params)) })
+(defn html-question [{:keys [question accepted top first]
+                      {:keys [title link score view_count answer_count tags owner creation_date]} :question}]
+  (html [:div {:class (str "stackoverflow-question" " " (if accepted "accepted" "open"))}
+         [:div.meta
+          [:span.votes (str score " votes")]
+          [:span {:class (str "answers" " " (if accepted "accepted" "open"))} (str answer_count " answers")]
+          [:span.views (str view_count " views")]]
+         [:div.title
+          [:a {:href link} title]]
+         [:ul.tags
+          (map #(vector :li %) tags)]
+         [:div.author
+          [:a {:href (:link owner)} (:display_name owner)]
+          " "
+          [:a {:href link} "asked " (pretty-date creation_date)]
+          [:a {:href "http://"} "username"]]
+         [:div.body (:body question)]
+         (if accepted
+           [:div.answer
+            [:a {:href (str link "/" (:answer_id accepted))} "accepted answer provided " (pretty-date (:creation_date accepted))]
+            " by "
+            [:a {:href (:link (:owner accepted))} (:display_name (:owner accepted))]
+            [:div.body (:body accepted)]]
+           [:div.answer
+            [:a {:href (str link "/" (:answer_id top))} "top answer provided " (pretty-date (:creation_date top))]
+            " by "
+            [:a {:href (:link (:owner top))} (:display_name (:owner top))]])
+         ]))
+
+(defn html-answer [{:keys [question answer]
+                    {:keys [title link score view_count answer_count tags owner creation_date]} :question}]
+  (html [:div {:class (str "stackoverflow-question" " " "featured")}
+         [:div.meta
+          [:span.votes (str score " votes")]
+          [:span {:class (str "answers" " " "selected")} (str answer_count " answers")]
+          [:span.views (str view_count " views")]]
+         [:div.title
+          [:a {:href link} title]]
+         [:ul.tags
+          (map #(vector :li %) tags)]
+         [:div.author
+          [:a {:href (:link owner)} (:display_name owner)]
+          " "
+          [:a {:href link} "asked " (pretty-date creation_date)]
+          [:a {:href "http://"} "username"]]
+         [:div.body (:body question)]
+         [:div.answer
+          [:a {:href (str link "/" (:answer_id question))} "featured answer provided " (pretty-date (:creation_date question))]
+          " by "
+          [:a {:href (:link (:owner answer))} (:display_name (:owner answer))]
+          [:div.body (:body answer)]]
+         ]))
+
+(defn oembed-question [question]
+  {:version "1.0"
+   :type "rich"
+   :author_name (-> question :question :owner :display_name)
+   :author_url (str "http://stackoverflow.com/users/" (-> question :question :owner :user_id))
+   :provider_name "StackOverflow"
+   :provider_url "http://www.stackoverflow.com/"
+   :html (html-question question)})
+
+(defn oembed-answer [answer]
+  {:version "1.0"
+   :type "rich"
+   :author_name (-> answer :answers first :owner :display_name)
+   :author_url (str "http://stackoverflow.com/users/" (-> answer :answers first :owner :user_id))
+   :provider_name "StackOverflow"
+   :provider_url "http://www.stackoverflow.com/"
+   :html (html-answer answer)})
+
+(defn error [url id]
+  {:error (str url " " "is not a valid StackOverflow URL")
+   :id id})
+
+(defn main [params]
+  (def id (re-find #"http://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params)))
+  (def questionid (nth id 1))
+  (def answerid (nth id 2 false))
+  (cond
+    answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
+    questionid (p/then (full-question questionid (:key params)) oembed-question)
+    :else (error (:url params) id)))
+
+(defn clj-promise->js [o]
+  (if (p/promise? o)
+    (p/then o (fn [r] (p/resolved (clj->js r))))
+    (clj->js o)))
+
+(set! js/main (fn [args] (clj-promise->js (main (js->clj args :keywordize-keys true)))))
