@@ -17,3 +17,4 @@ deployment:
     - git pull
     - git stash pop && git commit main.js -m "Deploy with CircleCI" || echo "nothing to do"
     - git push origin HEAD:master
+
