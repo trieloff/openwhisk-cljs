@@ -162,6 +162,7 @@
                          :zlib zlib
                          :response response
                          :length (get (-> response :headers) "Content-Length")
+                         :body (gunzip (-> response :body) (get (-> response :headers) "Content-Length"))
                          :p "p"}))))
 
 (defn main [params]
