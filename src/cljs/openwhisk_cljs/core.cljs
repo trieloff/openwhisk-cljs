@@ -161,10 +161,13 @@
      (let [id (re-find #"https?://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
            questionid (nth id 1)
            answerid (nth id 2 false)]
-       (cond
-         answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
-         questionid (p/then (full-question questionid (:key params)) oembed-question)
-         :else (error (:url params) id))))
+       {:id id
+        :questionid questionid
+        :answerid answerid}
+       (comment (cond
+          answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
+          questionid (p/then (full-question questionid (:key params)) oembed-question)
+          :else (error (:url params) id)))))
     (catch :default e {:exception e
                         :params params})))
 
