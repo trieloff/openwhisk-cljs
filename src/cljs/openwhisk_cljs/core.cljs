@@ -117,8 +117,7 @@
          [:div.author
           [:a {:href (:link owner)} (:display_name owner)]
           " "
-          [:a {:href link} "asked " (pretty-date creation_date)]
-          [:a {:href "http://"} "username"]]
+          [:a {:href link} "asked " (pretty-date creation_date)]]
          [:div.body (:body question)]
          [:div.answer
           [:a {:href (str link "/" (:answer_id question))} "featured answer provided " (pretty-date (:creation_date question))]
@@ -139,7 +138,6 @@
 (defn oembed-answer [answer]
   {:version "1.0"
    :type "rich"
-   :answer answer
    :author_name (-> answer :answer :owner :display_name)
    :author_url (str "http://stackoverflow.com/users/" (-> answer :answer :owner :user_id))
    :provider_name "StackOverflow"
