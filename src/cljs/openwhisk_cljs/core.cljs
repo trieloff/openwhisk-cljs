@@ -139,6 +139,7 @@
 (defn oembed-answer [answer]
   {:version "1.0"
    :type "rich"
+   :answer answer
    :author_name (-> answer :answers first :owner :display_name)
    :author_url (str "http://stackoverflow.com/users/" (-> answer :answers first :owner :user_id))
    :provider_name "StackOverflow"
@@ -148,44 +149,6 @@
 (defn error [url id]
   {:error (str url " " "is not a valid StackOverflow URL")
    :id id})
-
-(defn example-request [id key]
-  (p/then (http/get client
-             (str "https://api.stackexchange.com/2.2/questions/" id "/")
-             {:query-params {:site   "stackoverflow"
-                             :key    key
-                             :filter defaultfilter}})
-          (fn [response]
-            (p/resolved {:q "q"
-                         :zlib zlib
-                         :response response
-                         :length (get (-> response :headers) "Content-Length")
-                         :body (gunzip (-> response :body) (get (-> response :headers) "Content-Length"))
-                         :p "p"}))))
-
-(defn main2 [params]
-  (try
-    (if (nil? (:url params))
-      {:version "1.0"
-       :test    "hey"
-       :params  params
-       :error   "You need to specify a URL to embed. Use the `url` parameter."}
-      (let [id (re-find #"https?://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
-            questionid (nth id 1)
-            answerid (nth id 2 false)]
-        (cond
-          questionid (question questionid (:key params))
-          :else (p/promise {:hello      "world"
-                     :questionid questionid
-                     :answerid   answerid
-                     :id         id
-                     :params     params
-                     :out        (cond
-                                   answerid "answer"
-                                   questionid (p/then (full-question questionid (:key params)) identity)
-                                   :else error)}))))
-    (catch :default e {:exception e
-                       :params params})))
 
 (defn main [params]
   (try
