@@ -161,7 +161,11 @@
       (let [id (re-find #"https?://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
             questionid (nth id 1)
             answerid (nth id 2 false)]
-        {:hello "world"}))
+        {:hello "world"
+         :questionid questionid
+         :answerid answerid
+         :id id
+         :params params}))
     (catch :default e {:exception e
                        :params params})))
 
