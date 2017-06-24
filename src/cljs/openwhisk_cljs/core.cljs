@@ -160,6 +160,8 @@
           (fn [response]
             (p/resolved {:q "q"
                          :zlib zlib
+                         :response response
+                         :length (get (-> response :headers) "Content-Length")
                          :p "p"}))))
 
 (defn main [params]
