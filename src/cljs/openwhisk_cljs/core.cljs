@@ -13,9 +13,7 @@
 (nodejs/enable-util-print!)
 
 (defn gunzip [in len]
-  ;(println (.-Z_FINISH (.-constants zlib)))
-  (def unzipped (.toString (.gunzipSync zlib in)))
-  (identity unzipped))
+  (.toString (.gunzipSync zlib in)))
 
 (defn gzjson [zipped len]
   "Turn a GZipped string into JSON"
