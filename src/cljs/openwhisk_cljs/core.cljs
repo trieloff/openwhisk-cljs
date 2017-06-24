@@ -155,7 +155,7 @@
       :test    "hey"
       :params  params
       :error   "You need to specify a URL to embed. Use the `url` parameter."}
-     (let [id (re-find #"https?://stackoverflow.com/(questions|a)/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
+     (let [id (re-find #"https?://stackoverflow.com/(questions|a)/([\d]{4,})/?[^/]*/?([\d]{4,})?.*" (:url params))
            questionid (nth id 2)
            answerid (nth id 3 false)]
        (cond
