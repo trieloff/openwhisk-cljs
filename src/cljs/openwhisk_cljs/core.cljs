@@ -140,8 +140,8 @@
   {:version "1.0"
    :type "rich"
    :answer answer
-   :author_name (-> answer :answers first :owner :display_name)
-   :author_url (str "http://stackoverflow.com/users/" (-> answer :answers first :owner :user_id))
+   :author_name (-> answer :answer :owner :display_name)
+   :author_url (str "http://stackoverflow.com/users/" (-> answer :answer :owner :user_id))
    :provider_name "StackOverflow"
    :provider_url "http://www.stackoverflow.com/"
    :html (html-answer answer)})
