@@ -162,7 +162,7 @@
             questionid (nth id 1)
             answerid (nth id 2 false)]
         (cond
-          questionid {:q "q"}
+          questionid (full-question questionid (:key params))
           :else (p/promise {:hello      "world"
                      :questionid questionid
                      :answerid   answerid
