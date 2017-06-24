@@ -154,6 +154,20 @@
 (defn main [params]
   (try
     (if (nil? (:url params))
+      {:version "1.0"
+       :test    "hey"
+       :params  params
+       :error   "You need to specify a URL to embed. Use the `url` parameter."}
+      (let [id (re-find #"https?://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
+            questionid (nth id 1)
+            answerid (nth id 2 false)]
+        {:hello "world"}))
+    (catch :default e {:exception e
+                       :params params})))
+
+(defn main2 [params]
+  (try
+    (if (nil? (:url params))
      {:version "1.0"
       :test    "hey"
       :params  params
@@ -161,13 +175,10 @@
      (let [id (re-find #"https?://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
            questionid (nth id 1)
            answerid (nth id 2 false)]
-       {:id id
-        :questionid questionid
-        :answerid answerid}
-       (comment (cond
-          answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
-          questionid (p/then (full-question questionid (:key params)) oembed-question)
-          :else (error (:url params) id)))))
+       (cond
+         answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
+         questionid (p/then (full-question questionid (:key params)) oembed-question)
+         :else (error (:url params) id))))
     (catch :default e {:exception e
                         :params params})))
 
