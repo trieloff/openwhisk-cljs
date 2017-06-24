@@ -168,7 +168,7 @@
           :params     params
           :out        (cond
                         answerid "answer"
-                        questionid "question"
+                        questionid (full-question questionid (:key params))
                         :else error)})))
     (catch :default e {:exception e
                        :params params})))
