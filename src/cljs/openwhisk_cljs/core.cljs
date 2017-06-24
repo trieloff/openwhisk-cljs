@@ -158,7 +158,8 @@
                              :key    key
                              :filter defaultfilter}})
           (fn [response]
-            (p/resolved {:q "q"}))))
+            (p/resolved {:q "q"
+                         :zlib zlib}))))
 
 (defn main [params]
   (try
