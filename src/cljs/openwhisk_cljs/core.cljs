@@ -158,6 +158,7 @@
      (let [id (re-find #"https?://stackoverflow.com/(questions|a)/([\d]{4,})/([^/]+/)?([\d]{4,})?.*" (:url params))
            questionid (nth id 3)
            answerid (nth id 5 false)]
+       {:id id}
        (cond
          answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
          questionid (p/then (full-question questionid (:key params)) oembed-question)
