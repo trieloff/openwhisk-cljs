@@ -161,15 +161,17 @@
       (let [id (re-find #"https?://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
             questionid (nth id 1)
             answerid (nth id 2 false)]
-        (p/promise {:hello      "world"
-                    :questionid questionid
-                    :answerid   answerid
-                    :id         id
-                    :params     params
-                    :out        (cond
-                                  answerid "answer"
-                                  questionid (p/then (full-question questionid (:key params)) identity)
-                                  :else error)})))
+        (cond
+          questionid "question"
+          :else (p/promise {:hello      "world"
+                     :questionid questionid
+                     :answerid   answerid
+                     :id         id
+                     :params     params
+                     :out        (cond
+                                   answerid "answer"
+                                   questionid (p/then (full-question questionid (:key params)) identity)
+                                   :else error)}))))
     (catch :default e {:exception e
                        :params params})))
 
