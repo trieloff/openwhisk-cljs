@@ -152,13 +152,11 @@
   (try
     (if (nil? (:url params))
      {:version "1.0"
-      :test    "hey"
       :params  params
       :error   "You need to specify a URL to embed. Use the `url` parameter."}
      (let [id (re-find #"https?://stackoverflow.com/(questions|a)/([\d]{4,})/([^/]+/)?([\d]{4,})?.*" (:url params))
-           questionid (nth id 3)
-           answerid (nth id 5 false)]
-       {:id id}
+           questionid (nth id 2)
+           answerid (nth id 4 false)]
        (cond
          answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
          questionid (p/then (full-question questionid (:key params)) oembed-question)
