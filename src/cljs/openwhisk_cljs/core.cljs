@@ -174,7 +174,7 @@
             questionid (nth id 1)
             answerid (nth id 2 false)]
         (cond
-          questionid (example-request questionid (:key params))
+          questionid (question questionid (:key params))
           :else (p/promise {:hello      "world"
                      :questionid questionid
                      :answerid   answerid
