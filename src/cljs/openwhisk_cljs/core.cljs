@@ -149,20 +149,17 @@
    :id id})
 
 (defn main [params]
-  (try
-    (if (nil? (:url params))
-     {:version "1.0"
-      :params  params
-      :error   "You need to specify a URL to embed. Use the `url` parameter."}
-     (let [id (re-find #"https?://stackoverflow.com/(questions|a)/([\d]{4,})/([^/]+/)?([\d]{4,})?.*" (:url params))
-           questionid (nth id 2)
-           answerid (nth id 4 false)]
-       (cond
-         answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
-         questionid (p/then (full-question questionid (:key params)) oembed-question)
-         :else (error (:url params) id))))
-    (catch :default e {:exception e
-                        :params params})))
+  (if (nil? (:url params))
+    {:version "1.0"
+     :params  params
+     :error   "You need to specify a URL to embed. Use the `url` parameter."}
+    (let [id (re-find #"https?://stackoverflow.com/(questions|a)/([\d]{4,})/([^/]+/)?([\d]{4,})?.*" (:url params))
+          questionid (nth id 2)
+          answerid (nth id 4 false)]
+      (cond
+        answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
+        questionid (p/then (full-question questionid (:key params)) oembed-question)
+        :else (error (:url params) id)))))
 
 (defn clj-promise->js [o]
   (if (p/promise? o)
