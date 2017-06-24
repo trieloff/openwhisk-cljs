@@ -163,7 +163,7 @@
                          :body (gunzip (-> response :body) (get (-> response :headers) "Content-Length"))
                          :p "p"}))))
 
-(defn main [params]
+(defn main2 [params]
   (try
     (if (nil? (:url params))
       {:version "1.0"
@@ -187,7 +187,7 @@
     (catch :default e {:exception e
                        :params params})))
 
-(defn main2 [params]
+(defn main [params]
   (try
     (if (nil? (:url params))
      {:version "1.0"
