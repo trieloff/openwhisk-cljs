@@ -22,11 +22,7 @@ $ lein cljsbuild auto server-prod
 ## Testing it locally
 
 ```bash
-$ node test.js ./main.js param1=value1
+$ node test.js ./main.js url=http://stackoverflow.com/questions/43791970/pandas-assigning-columns-with-multiple-conditions-and-date-thresholds
 ```
 
-Alternatively, you can also pass in parameters as a JSON object on stdin.
-
-```bash
-$ echo '{"foo":"bar"}' | node test.js ./main.js
-```
+Specify your StackExchange API key in the `key` parameter if you run into rate limit issues.
