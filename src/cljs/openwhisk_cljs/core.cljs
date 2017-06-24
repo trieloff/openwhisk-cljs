@@ -162,14 +162,14 @@
             questionid (nth id 1)
             answerid (nth id 2 false)]
         (p/promise {:hello      "world"
-          :questionid questionid
-          :answerid   answerid
-          :id         id
-          :params     params
-          :out        (cond
-                        answerid "answer"
-                        questionid (full-question questionid (:key params))
-                        :else error)})))
+                    :questionid questionid
+                    :answerid   answerid
+                    :id         id
+                    :params     params
+                    :out        (cond
+                                  answerid "answer"
+                                  questionid (p/then (full-question questionid (:key params)) identity)
+                                  :else error)})))
     (catch :default e {:exception e
                        :params params})))
 
