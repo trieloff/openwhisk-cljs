@@ -165,7 +165,11 @@
          :questionid questionid
          :answerid answerid
          :id id
-         :params params}))
+         :params params
+         :out (cond
+                answerid "answer"
+                questionid "question"
+                :else error)}))
     (catch :default e {:exception e
                        :params params})))
 
