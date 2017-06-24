@@ -12,12 +12,12 @@
 
 (nodejs/enable-util-print!)
 
-(defn gunzip [in len]
+(defn gunzip [in]
   (.toString (.gunzipSync zlib in)))
 
-(defn gzjson [zipped len]
+(defn gzjson [zipped]
   "Turn a GZipped string into JSON"
-  (js->clj (.parse js/JSON (gunzip zipped len)) :keywordize-keys true))
+  (js->clj (.parse js/JSON (gunzip zipped)) :keywordize-keys true))
 
 (defn question
   "Gets the question specified by `id` as a map."
@@ -28,7 +28,7 @@
                                     :key key
                                     :filter defaultfilter}})
           (fn [response]
-            (p/resolved (first (:items (gzjson (:body response) (get (-> response :headers) "Content-Length"))))))))
+            (p/resolved (first (:items (gzjson (:body response))))))))
 
 (defn answers
   "Gets the answers for the question specified by `id` as a list."
@@ -39,7 +39,7 @@
                                     :filter defaultfilter
                                     :key key}})
           (fn [response]
-            (p/resolved (:items (gzjson (:body response) (get (-> response :headers) "Content-Length")))))))
+            (p/resolved (:items (gzjson (:body response)))))))
 
 (defn full-question
   "Gets question `id` including all answers. Optionally, filter answers with
@@ -59,7 +59,7 @@
                                     :key key
                                     :filter defaultfilter}})
           (fn [response]
-            (p/resolved (:items (gzjson (:body response) (get (-> response :headers) "Content-Length")))))))
+            (p/resolved (:items (gzjson (:body response)))))))
 
 (defn full-answer [aid qid key]
   (let [q (p/all [(question qid key)
