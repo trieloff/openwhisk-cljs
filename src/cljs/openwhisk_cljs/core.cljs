@@ -152,11 +152,13 @@
    :id id})
 
 (defn example-request [id key]
-  (http/get client
-            (str "https://api.stackexchange.com/2.2/questions/" id "/")
-            {:query-params {:site "stackoverflow"
-                            :key key
-                            :filter defaultfilter}}))
+  (p/then (http/get client
+             (str "https://api.stackexchange.com/2.2/questions/" id "/")
+             {:query-params {:site   "stackoverflow"
+                             :key    key
+                             :filter defaultfilter}})
+          (fn [response]
+            (p/resolved {:q "q"}))))
 
 (defn main [params]
   (try
@@ -169,7 +171,7 @@
             questionid (nth id 1)
             answerid (nth id 2 false)]
         (cond
-          questionid (question questionid (:key params))
+          questionid (example-request questionid (:key params))
           :else (p/promise {:hello      "world"
                      :questionid questionid
                      :answerid   answerid
