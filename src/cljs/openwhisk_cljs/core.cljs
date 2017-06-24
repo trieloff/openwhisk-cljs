@@ -151,6 +151,12 @@
   {:error (str url " " "is not a valid StackOverflow URL")
    :id id})
 
+(defn example-request [o p]
+  (http/get client
+            (str "http://www.example.com")
+            {:query-params {:site "stackoverflow"
+                            :filter defaultfilter}}))
+
 (defn main [params]
   (try
     (if (nil? (:url params))
@@ -162,7 +168,7 @@
             questionid (nth id 1)
             answerid (nth id 2 false)]
         (cond
-          questionid (full-question questionid (:key params))
+          questionid (example-request questionid (:key params))
           :else (p/promise {:hello      "world"
                      :questionid questionid
                      :answerid   answerid
