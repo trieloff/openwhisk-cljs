@@ -151,10 +151,11 @@
   {:error (str url " " "is not a valid StackOverflow URL")
    :id id})
 
-(defn example-request [o p]
+(defn example-request [id key]
   (http/get client
-            (str "http://www.example.com")
+            (str "https://api.stackexchange.com/2.2/questions/" id "/")
             {:query-params {:site "stackoverflow"
+                            :key key
                             :filter defaultfilter}}))
 
 (defn main [params]
