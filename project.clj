@@ -12,6 +12,7 @@
               :source-paths ["src/cljs"]
               :compiler {:main openwhisk-cljs.core
                          :output-to "main.js"
+                         :hashbang false
                          :target :nodejs
                          :optimizations :simple ;; notice this!
                          }}]})

@@ -1,20 +1,19 @@
 compile:
   override:
-  - rm main.js
+  - lein --version
   - lein cljsbuild once server-prod
   - lein install
 test:
   override:
   - node main.js
+  - head -n 1 main.js | grep node || tail -n +1 main.js > main.js
 deployment:
   production:
     branch: dev
     commands:
-    - git config --global user.email deploy@circleci.com
-    - git config --global user.name 'CircleCI'
-    - git stash save main.js
-    - git checkout master
-    - git pull -s recursive -X ours
-    - git stash pop && git commit main.js -m "Deploy with CircleCI" || echo "nothing to do"
-    - git push origin HEAD:master
+      - git config --global user.email deploy@circleci.com
+      - git config --global user.name 'CircleCI'
+      - git checkout master
+      - git commit main.js -m "Deploy with CircleCI" || echo "nothing to do"
+      - git push origin HEAD:master
 
