@@ -158,7 +158,7 @@
       :test    "hey"
       :params  params
       :error   "You need to specify a URL to embed. Use the `url` parameter."}
-     (let [id (re-find #"http://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
+     (let [id (re-find #"https?://stackoverflow.com/questions/([\d]{4,})/[^/]+/?([\d]{4,})?.*" (:url params))
            questionid (nth id 1)
            answerid (nth id 2 false)]
        (cond
@@ -166,7 +166,6 @@
          questionid (p/then (full-question questionid (:key params)) oembed-question)
          :else (error (:url params) id))))
     (catch :default e {:exception e
-                       
                         :params params})))
 
 (defn clj-promise->js [o]
