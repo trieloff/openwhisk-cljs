@@ -8,15 +8,16 @@ Sample OpenWhisk action written in ClojureScript.
 First, compile ClojureScript
 
 ```bash
-$ lumo -c src/cljs build.cljs
-```
-This should create/update the file `main.js`. Alternatively, you can use leiningen.
-
-```bash
 $ lein cljsbuild once server-prod
 ```
 
 This command installs the node modules and generates the source code for the action at `main.js`.
+
+During development, you might want to have the cljsbuild run continuously in the background:
+
+```bash
+$ lein cljsbuild auto server-prod
+```
 
 ## Testing it locally
 
