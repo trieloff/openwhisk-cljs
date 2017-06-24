@@ -14,7 +14,7 @@
 
 (defn gunzip [in len]
   ;(println (.-Z_FINISH (.-constants zlib)))
-  (def unzipped (.toString (.gunzipSync zlib in #js {:finishFlush  (.-Z_SYNC_FLUSH (.-constants zlib))})))
+  (def unzipped (.toString (.gunzipSync zlib in)))
   (identity unzipped))
 
 (defn gzjson [zipped len]
