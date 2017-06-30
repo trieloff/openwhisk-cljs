@@ -9,14 +9,11 @@
              :refer-macros [log  trace  debug  info  warn  error  fatal  report
                             logf tracef debugf infof warnf errorf fatalf reportf
                             spy get-env]]
+            [openwhisk-cljs.loggly :as loggly]
             [httpurr.client.node :refer [client]]))
 
 (def zlib (js/require "zlib"))
 (def defaultfilter "withbody")
-
-(timbre/merge-config! {:level :error})
-
-(info "Get this??")
 
 (nodejs/enable-util-print!)
 
@@ -157,10 +154,16 @@
    :id id})
 
 (defn main [params]
+  (if (not (nil? (:loggly params)))
+    (timbre/merge-config! {:level :debug
+                           :appenders {:loggly (loggly/loggly-appender {:tags [:oembed :stackoverflow :timbre]
+                                                                        :token (:loggly params)})}}))
   (if (nil? (:url params))
-    {:version "1.0"
-     :params  params
-     :error   "You need to specify a URL to embed. Use the `url` parameter."}
+    (do
+      (warn params "No URL provided")
+      {:version "1.0"
+       :params  (dissoc params :key :loggly)
+       :error   "You need to specify a URL to embed. Use the `url` parameter."})
     (let [id (re-find #"https?://stackoverflow.com/(questions|a)/([\d]{4,})/([^/]+/)?([\d]{4,})?.*" (:url params))
           questionid (nth id 2)
           answerid (nth id 4 false)]
