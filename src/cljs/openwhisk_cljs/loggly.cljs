@@ -9,16 +9,23 @@
             [taoensso.encore :as enc]
             [cljs.nodejs :as nodejs]))
 
+(defn not-string? [x]
+  (not (string? x)))
+
+(defn first-or-all [x]
+  (if (= (count x) 1) (first x) x))
+
 (defn loggly-appender [& [opts]]
   (let [{:keys [token tags]} opts]
     {:enabled?   true
      :async?     true
      :rate-limit [[1 (enc/ms :secs 1)]]
      :output-fn  #(do
-                    (.stringify js/JSON (clj->js {:args      (:vargs %)
-                                                 :level     (:level %)
-                                                 :namespace (:?ns-str %)
-                                                 :line      (:?line %)})))
+                    (.stringify js/JSON (clj->js {:args      (first-or-all (filter not-string? (:vargs %)))
+                                                  :level     (:level %)
+                                                  :namespace (:?ns-str %)
+                                                  :message   (apply str (filter string? (:vargs %)))
+                                                  :line      (:?line %)})))
      :fn         (fn [data]
                    (let [{:keys [output_]} data
                          tag (string/join "," (map name (if (nil? tags) '[:timbre] tags)))]
