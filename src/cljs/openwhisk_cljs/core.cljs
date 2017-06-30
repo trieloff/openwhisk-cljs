@@ -5,10 +5,18 @@
             [httpurr.client :as http]
             [promesa.core :as p]
             [hiccups.runtime :as hiccupsrt]
+            [taoensso.timbre :as timbre
+             :refer-macros [log  trace  debug  info  warn  error  fatal  report
+                            logf tracef debugf infof warnf errorf fatalf reportf
+                            spy get-env]]
             [httpurr.client.node :refer [client]]))
 
 (def zlib (js/require "zlib"))
 (def defaultfilter "withbody")
+
+(timbre/merge-config! {:level :error})
+
+(info "Get this??")
 
 (nodejs/enable-util-print!)
 
