@@ -25,4 +25,4 @@
                      (http/post client
                                 (str "http://logs-01.loggly.com/inputs/" token "/tag/" tag "/")
                                 {:body    (force output_)
-                                 :headers {"Content-Type" "text/plain"}})))}))
+                                 :headers {"Content-Type" "application/json"}})))}))
