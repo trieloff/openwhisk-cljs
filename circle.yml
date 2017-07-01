@@ -1,10 +1,13 @@
 machine:
   node:
     version: 6.1.0
+dependencies:
+  pre:
+    commands:
+      - npm install --save-dev deploy-to-git
 compile:
   override:
   - lein cljsbuild once server-prod
-  - lein install
 test:
   override:
   - node main.js
@@ -12,7 +15,6 @@ deployment:
   production:
     branch: dev
     commands:
-      - rm -rf main.js build
-      - npm install --save-dev deploy-to-git
+      - rm -rf build
       - npm run deploy
 
