@@ -13,6 +13,7 @@ deployment:
   production:
     branch: dev
     commands:
+      - rm -rf main.js build
       - npm install --save-dev deploy-to-git
       - npm run deploy
 
