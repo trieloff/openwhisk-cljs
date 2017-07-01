@@ -1,3 +1,6 @@
+machine:
+  node:
+    version: 7.6.0
 compile:
   override:
   - lein cljsbuild once server-prod
