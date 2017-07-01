@@ -1,7 +1,7 @@
 {
   "scripts": {
     "deploy": "deploy-to-git",
-    "build-my-app": "lein cljsbuild once server-prod && cp main.js build"
+    "build-my-app": "lein cljsbuild once server-prod && cp main.js manifest.yaml build"
   },
   "config": {
     "deployToGit": {
