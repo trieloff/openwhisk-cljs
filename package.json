@@ -1,7 +1,7 @@
 {
   "scripts": {
     "deploy": "deploy-to-git",
-    "build-my-app": "rm -rf build && mkdir build && lein cljsbuild once server-prod && cp main.js build"
+    "build-my-app": "lein cljsbuild once server-prod && cp main.js build"
   },
   "config": {
     "deployToGit": {
@@ -11,9 +11,12 @@
       "script": "npm run build-my-app",
       "commit": "[ci skip] deploy to Adobe I/O Runtime",
       "user": {
-      "email": "lars@trieloff.net",
-      "name": "Lars Trieloff"
+        "email": "lars@trieloff.net",
+        "name": "Lars Trieloff"
       }
     }
+  },
+  "devDependencies": {
+    "deploy-to-git": "^0.1.4"
   }
 }
