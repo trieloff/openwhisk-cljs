@@ -9,7 +9,7 @@
       "branch": "master",
       "folder": "build",
       "script": "npm run build-my-app",
-      "commit": "[ci skip] deploy build $CIRCLE_BUILD_NUM to Adobe I/O Runtime",
+      "commit": "[ci skip] deploy build #$CIRCLE_BUILD_NUM to Adobe I/O Runtime",
       "user": {
         "email": "lars@trieloff.net",
         "name": "Lars Trieloff"
