@@ -3,8 +3,7 @@ machine:
     version: 6.1.0
 dependencies:
   pre:
-    commands:
-      - npm install --save-dev deploy-to-git
+    - npm install --save-dev deploy-to-git
 compile:
   override:
   - lein cljsbuild once server-prod
