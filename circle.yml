@@ -1,9 +1,6 @@
 machine:
   node:
     version: 7.6.0
-dependencies:
-  pre:
-    - lein cljsbuild
 compile:
   override:
   - lein cljsbuild once server-prod
