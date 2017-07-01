@@ -1,6 +1,5 @@
 compile:
   override:
-  - lein --version
   - lein cljsbuild once server-prod
   - lein install
 test:
@@ -11,9 +10,6 @@ deployment:
   production:
     branch: dev
     commands:
-      - git config --global user.email deploy@circleci.com
-      - git config --global user.name 'CircleCI'
-      - git checkout master
-      - git commit main.js -m "Deploy with CircleCI" || echo "nothing to do"
-      - git push origin HEAD:master
+      - npm install --save-dev deploy-to-git
+      - npm run deploy
 

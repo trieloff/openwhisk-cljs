@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "deploy": "deploy-to-git",
+    "build-my-app": "rm -rf build && mkdir build && lein cljsbuild once server-prod && cp main.js build"
+  },
+  "config": {
+    "deployToGit": {
+      "repository": "git@github.com:trieloff/openwhisk-cljs.git",
+      "branch": "master",
+      "folder": "build",
+      "script": "npm run build-my-app",
+      "commit": "[ci skip] deploy to Adobe I/O Runtime",
+      "user": {
+      "email": "lars@trieloff.net",
+      "name": "Lars Trieloff"
+      }
+    }
+  }
+}
