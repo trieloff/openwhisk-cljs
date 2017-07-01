@@ -4341,4 +4341,4 @@
 //main=function(a){return openwhisk_cljs.core.clj_promise__GT_js.call(null,openwhisk_cljs.core.main.call(null,cljs.core.js__GT_clj.call(null,a,new cljs.core.Keyword(null,"keywordize-keys","keywordize-keys",1310784252),!0)))};cljs.nodejscli={};cljs.core.truth_(COMPILED)&&(goog.global=global);cljs.core.fn_QMARK_.call(null,cljs.core._STAR_main_cli_fn_STAR_)&&cljs.core.apply.call(null,cljs.core._STAR_main_cli_fn_STAR_,cljs.core.drop.call(null,2,process.argv));
 function main() {
 	return {"goo":"bar"};
-}
+}//
