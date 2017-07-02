@@ -4,7 +4,8 @@
                  [hiccups "0.3.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [org.clojure/clojure "1.8.0"]]
-  :plugins [[lein-cljsbuild "1.1.6"]]
+  :plugins [[lein-cljsbuild "1.1.6"]
+            [lein-doo "0.1.7"]]
   :clean-targets ^{:protect false} ["target", "main.js"]
   :cljsbuild {
     :builds [{:id "server-prod"

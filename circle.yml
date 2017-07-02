@@ -9,7 +9,7 @@ compile:
   - lein cljsbuild once server-prod
 test:
   override:
-  - node main.js
+  - lein doo node server-test once
 deployment:
   production:
     branch: dev
