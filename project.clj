@@ -5,7 +5,6 @@
                  [com.taoensso/timbre "4.10.0"]
                  [org.clojure/clojure "1.8.0"]]
   :plugins [[lein-cljsbuild "1.1.6"]]
-  :repositories [["jitpack" "https://jitpack.io"]]
   :clean-targets ^{:protect false} ["target"]
   :cljsbuild {
     :builds [
