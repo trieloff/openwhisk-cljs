@@ -1,4 +1,4 @@
-(ns openwhisk-cljs.loggly
+(ns stackoverflow-embed.loggly
   (:require [httpurr.client :as http]
             [taoensso.timbre :as timbre
              :refer-macros [log trace debug info warn error fatal report

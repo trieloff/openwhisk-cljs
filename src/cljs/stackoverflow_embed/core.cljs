@@ -1,4 +1,4 @@
-(ns openwhisk-cljs.core
+(ns stackoverflow-embed.core
   (:require-macros [hiccups.core :as hiccups :refer [html]])
   (:require [cljs.core :as core]
             [cljs.nodejs :as nodejs]
@@ -9,7 +9,7 @@
              :refer-macros [log  trace  debug  info  warn  error  fatal  report
                             logf tracef debugf infof warnf errorf fatalf reportf
                             spy get-env]]
-            [openwhisk-cljs.loggly :as loggly]
+            [stackoverflow-embed.loggly :as loggly]
             [httpurr.client.node :refer [client]]))
 
 (def zlib (js/require "zlib"))
@@ -149,7 +149,8 @@
    :provider_url "http://www.stackoverflow.com/"
    :html (html-answer answer)})
 
-(defn error [url id]
+(defn oembed-error [url id]
+  (error "Invalid Stackoverflow ID" url)
   {:error (str url " " "is not a valid StackOverflow URL")
    :id id})
 
@@ -170,7 +171,7 @@
       (cond
         answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
         questionid (p/then (full-question questionid (:key params)) oembed-question)
-        :else (error (:url params) id)))))
+        :else (oembed-error (:url params) id)))))
 
 (defn clj-promise->js [o]
   (if (p/promise? o)
