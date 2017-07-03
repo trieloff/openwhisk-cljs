@@ -155,25 +155,26 @@
    :id id})
 
 (defn main [params]
-  (timbre/merge-config! {:level :debug})
-  (debug params "Logger activated.")
-  (if (not (nil? (:loggly params)))
-    (timbre/merge-config! {:appenders {:loggly (loggly/loggly-appender {:tags [:oembed :stackoverflow :timbre]
-                                                                        :token (:loggly params)})}}))
-  (debug params "I'm here.")
-  (if (nil? (:url params))
-    (do
-      (warn params "No URL provided")
-      {:version "1.0"
-       :params  (dissoc params :key :loggly)
-       :error   "You need to specify a URL to embed. Use the `url` parameter."})
-    (let [id (re-find #"https?://stackoverflow.com/(questions|a)/([\d]{4,})/([^/]+/)?([\d]{4,})?.*" (:url params))
-          questionid (nth id 2)
-          answerid (nth id 4 false)]
-      (cond
-        answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
-        questionid (p/then (full-question questionid (:key params)) oembed-question)
-        :else (oembed-error (:url params) id)))))
+  (let [safe-params (dissoc params :key :loggly)]
+    (timbre/merge-config! {:level :debug})
+    (debug params "Logger activated.")
+    (if (not (nil? (:loggly params)))
+      (timbre/merge-config! {:appenders {:loggly (loggly/loggly-appender {:tags [:oembed :stackoverflow :timbre]
+                                                                          :token (:loggly params)})}}))
+    (if (nil? (:url params))
+      (do
+        (warn safe-params "No URL provided")
+        {:version "1.0"
+         :params  safe-params
+         :error   "You need to specify a URL to embed. Use the `url` parameter."})
+      (let [id (re-find #"https?://stackoverflow.com/(questions|a)/([\d]{4,})/([^/]+/)?([\d]{4,})?.*" (:url params))
+            questionid (nth id 2)
+            answerid (nth id 4 false)]
+        (debug id "Embedding URL")
+        (cond
+          answerid (p/then (full-answer answerid questionid (:key params)) oembed-answer)
+          questionid (p/then (full-question questionid (:key params)) oembed-question)
+          :else (oembed-error (:url params) id))))))
 
 (defn clj-promise->js [o]
   (if (p/promise? o)
