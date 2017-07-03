@@ -155,10 +155,12 @@
    :id id})
 
 (defn main [params]
+  (timbre/merge-config! {:level :debug})
+  (debug params "Logger activated.")
   (if (not (nil? (:loggly params)))
-    (timbre/merge-config! {:level :debug
-                           :appenders {:loggly (loggly/loggly-appender {:tags [:oembed :stackoverflow :timbre]
+    (timbre/merge-config! {:appenders {:loggly (loggly/loggly-appender {:tags [:oembed :stackoverflow :timbre]
                                                                         :token (:loggly params)})}}))
+  (debug params "I'm here.")
   (if (nil? (:url params))
     (do
       (warn params "No URL provided")
