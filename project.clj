@@ -12,6 +12,10 @@
               :source-paths ["src/cljs"]
               :compiler {:main stackoverflow-embed.core
                          :output-to "main.js"
+                         :language-in  :ecmascript5
+                         :language-out :ecmascript5
+                         :pretty-print true
+                         :closure-output-charset "US-ASCII" ;; USA! USA! USA! https://github.com/google/closure-compiler/issues/1704
                          :hashbang false
                          :optimizations :simple ;; notice this!
                          :target :nodejs }}
