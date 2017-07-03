@@ -11,6 +11,6 @@ package:
         key:
           type: String
           description: StackExchange API Key
-        loggy:
+        loggly:
           type: String
           description: Loggly API Key
