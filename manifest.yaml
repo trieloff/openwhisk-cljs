@@ -8,6 +8,9 @@ package:
       location: main.js
       runtime: nodejs@6
       inputs:
+        key:
+          type: String
+          description: StackExchange API Key
         loggly:
           type: String
           description: Loggly API Key
