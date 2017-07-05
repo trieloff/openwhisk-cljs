@@ -41776,34 +41776,34 @@ stackoverflow_embed.core.oembed_answer = function(a) {
   new cljs.core.Keyword(null, "provider_name", "provider_name", -640331695), "StackOverflow", new cljs.core.Keyword(null, "provider_url", "provider_url", -1973444164), "http://www.stackoverflow.com/", new cljs.core.Keyword(null, "html", "html", -998796897), stackoverflow_embed.core.html_answer.call(null, a)], null);
 };
 stackoverflow_embed.core.oembed_error = function(a, b) {
-  taoensso.timbre._log_BANG_.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "error", "error", -978969032), "stackoverflow-embed.core", "/tmp/form-init6127327328345040372.clj", 153, new cljs.core.Keyword(null, "p", "p", 151049309), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Delay(function() {
+  taoensso.timbre._log_BANG_.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "error", "error", -978969032), "stackoverflow-embed.core", "/tmp/form-init8889925223551754994.clj", 153, new cljs.core.Keyword(null, "p", "p", 151049309), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Delay(function() {
     return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["Invalid Stackoverflow ID", a], null);
-  }, null), null, -2032569864);
+  }, null), null, -1345667294);
   return new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "error", "error", -978969032), [cljs.core.str.cljs$core$IFn$_invoke$arity$1(a), cljs.core.str.cljs$core$IFn$_invoke$arity$1(" "), cljs.core.str.cljs$core$IFn$_invoke$arity$1("is not a valid StackOverflow URL")].join(""), new cljs.core.Keyword(null, "id", "id", -1388402092), b], null);
 };
 stackoverflow_embed.core.main = function(a) {
   var b = cljs.core.dissoc.call(null, a, new cljs.core.Keyword(null, "key", "key", -1516042587), new cljs.core.Keyword(null, "loggly", "loggly", 1096477133));
   taoensso.timbre.merge_config_BANG_.call(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "level", "level", 1290497552), new cljs.core.Keyword(null, "debug", "debug", -1608172596)], null));
-  taoensso.timbre._log_BANG_.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "debug", "debug", -1608172596), "stackoverflow-embed.core", "/tmp/form-init6127327328345040372.clj", 160, new cljs.core.Keyword(null, "p", "p", 151049309), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Delay(function(b) {
+  taoensso.timbre._log_BANG_.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "debug", "debug", -1608172596), "stackoverflow-embed.core", "/tmp/form-init8889925223551754994.clj", 160, new cljs.core.Keyword(null, "p", "p", 151049309), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Delay(function(b) {
     return function() {
       return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [a, "Logger activated."], null);
     };
-  }(b), null), null, -628854144);
+  }(b), null), null, 2002669588);
   null != (new cljs.core.Keyword(null, "loggly", "loggly", 1096477133)).cljs$core$IFn$_invoke$arity$1(a) && taoensso.timbre.merge_config_BANG_.call(null, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "appenders", "appenders", 1245583998), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "loggly", "loggly", 1096477133), stackoverflow_embed.loggly.loggly_appender.call(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "tags", 
   "tags", 1771418977), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "oembed", "oembed", 2091783668), new cljs.core.Keyword(null, "stackoverflow", "stackoverflow", 924682584), new cljs.core.Keyword(null, "timbre", "timbre", -309810402)], null), new cljs.core.Keyword(null, "token", "token", -1211463215), (new cljs.core.Keyword(null, "loggly", "loggly", 1096477133)).cljs$core$IFn$_invoke$arity$1(a)], null))], null)], null));
   if (null == (new cljs.core.Keyword(null, "url", "url", 276297046)).cljs$core$IFn$_invoke$arity$1(a)) {
-    return taoensso.timbre._log_BANG_.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "warn", "warn", -436710552), "stackoverflow-embed.core", "/tmp/form-init6127327328345040372.clj", 166, new cljs.core.Keyword(null, "p", "p", 151049309), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Delay(function(a) {
+    return taoensso.timbre._log_BANG_.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "warn", "warn", -436710552), "stackoverflow-embed.core", "/tmp/form-init8889925223551754994.clj", 166, new cljs.core.Keyword(null, "p", "p", 151049309), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Delay(function(a) {
       return function() {
         return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [a, "No URL provided"], null);
       };
-    }(b), null), null, 1805655407), new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null, "version", "version", 425292698), "1.0", new cljs.core.Keyword(null, "params", "params", 710516235), b, new cljs.core.Keyword(null, "error", "error", -978969032), "You need to specify a URL to embed. Use the `url` parameter."], null);
+    }(b), null), null, 72661597), new cljs.core.PersistentArrayMap(null, 3, [new cljs.core.Keyword(null, "version", "version", 425292698), "1.0", new cljs.core.Keyword(null, "params", "params", 710516235), b, new cljs.core.Keyword(null, "error", "error", -978969032), "You need to specify a URL to embed. Use the `url` parameter."], null);
   }
   var c = cljs.core.re_find.call(null, /https?:\/\/stackoverflow.com\/(questions|a)\/([\d]{4,})\/([^\/]+\/)?([\d]{4,})?.*/, (new cljs.core.Keyword(null, "url", "url", 276297046)).cljs$core$IFn$_invoke$arity$1(a)), d = cljs.core.nth.call(null, c, 2), e = cljs.core.nth.call(null, c, 4, !1);
-  taoensso.timbre._log_BANG_.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "debug", "debug", -1608172596), "stackoverflow-embed.core", "/tmp/form-init6127327328345040372.clj", 173, new cljs.core.Keyword(null, "p", "p", 151049309), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Delay(function(a, b, c, d) {
+  taoensso.timbre._log_BANG_.call(null, taoensso.timbre._STAR_config_STAR_, new cljs.core.Keyword(null, "debug", "debug", -1608172596), "stackoverflow-embed.core", "/tmp/form-init8889925223551754994.clj", 173, new cljs.core.Keyword(null, "p", "p", 151049309), new cljs.core.Keyword(null, "auto", "auto", -566279492), new cljs.core.Delay(function(a, b, c, d) {
     return function() {
       return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [a, "Embedding URL"], null);
     };
-  }(c, d, e, b), null), null, 156212098);
+  }(c, d, e, b), null), null, -564525676);
   return cljs.core.truth_(e) ? promesa.core.then.call(null, stackoverflow_embed.core.full_answer.call(null, e, d, (new cljs.core.Keyword(null, "key", "key", -1516042587)).cljs$core$IFn$_invoke$arity$1(a)), stackoverflow_embed.core.oembed_answer) : cljs.core.truth_(d) ? promesa.core.then.call(null, stackoverflow_embed.core.full_question.call(null, d, (new cljs.core.Keyword(null, "key", "key", -1516042587)).cljs$core$IFn$_invoke$arity$1(a)), stackoverflow_embed.core.oembed_question) : stackoverflow_embed.core.oembed_error.call(null, 
   (new cljs.core.Keyword(null, "url", "url", 276297046)).cljs$core$IFn$_invoke$arity$1(a), c);
 };
