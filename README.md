@@ -5,6 +5,7 @@ Sample OpenWhisk action written in ClojureScript.
 
 ## Installing
 
+
 First, compile ClojureScript
 
 ```bash
