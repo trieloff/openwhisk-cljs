@@ -9,7 +9,7 @@
              :refer-macros [log  trace  debug  info  warn  error  fatal  report
                             logf tracef debugf infof warnf errorf fatalf reportf
                             spy get-env]]
-            [stackoverflow-embed.loggly :as loggly]
+            [timbre.loggly :as loggly]
             [httpurr.client.node :refer [client]]))
 
 (def zlib (js/require "zlib"))
